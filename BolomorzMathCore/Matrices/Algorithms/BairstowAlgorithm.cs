@@ -1,6 +1,6 @@
 namespace BolomorzMathCore.Matrices.Algorithms;
 
-public class BairstowAlgorithm
+public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
 {
 
     private class QuadraticRoots
@@ -17,12 +17,7 @@ public class BairstowAlgorithm
 
     private const int ITERMAX = 1000;
 
-    protected Complex[] EigenValues { get; set; }
-
-    public BairstowAlgorithm(CharacteristicPolynomial polynomial)
-    {
-        EigenValues = [.. Bairstow(polynomial.GetResult())];
-    }
+    protected Complex[] EigenValues { get; set; } = [.. Bairstow(polynomial.GetResult())];
 
     private static List<Complex> Bairstow(Complex[] A)
     {

@@ -1,25 +1,14 @@
 namespace BolomorzMathCore.Charting;
 
-public class Axis
+public class Axis(string name, string unit, double min, double max)
 {
-    public string Name { get; private set; }
-    public string Unit { get; private set; }
-    public double LastVal { get; private set; }
-    public double Min { get; private set; }
-    public double Max { get; private set; }
-    public double DefaultMin { get; private set; }
-    public double DefaultMax { get; private set; }
-
-    public Axis(string name, string unit, double min, double max)
-    {
-        Name = name;
-        Unit = unit;
-        LastVal = double.MinValue;
-        Min = min;
-        DefaultMin = min;
-        Max = max;
-        DefaultMax = max;
-    }
+    public string Name { get; private set; } = name;
+    public string Unit { get; private set; } = unit;
+    public double LastVal { get; private set; } = double.MinValue;
+    public double Min { get; private set; } = min;
+    public double Max { get; private set; } = max;
+    public double DefaultMin { get; private set; } = min;
+    public double DefaultMax { get; private set; } = max;
 
     public void SetMin(double min)
     {

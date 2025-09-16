@@ -6,14 +6,9 @@ public interface IGraphAlgorithm<T>
     AlgorithmElement<T>? GetResult(Vertex endvertex);
 }
 
-public class AlgorithmElement<T>
+public class AlgorithmElement<T>(T result)
 {
-    public T Result { get; private set; }
-
-    public AlgorithmElement(T result)
-    {
-        Result = result;
-    }
+    public T Result { get; private set; } = result;
 }
 
 public class ShortestPath

@@ -4,7 +4,7 @@ public class Function
 {
     protected double[] Values { get; set; }
     public double[] GetValues() => [.. Values];
-    protected FunctionType Type { get; set; }
+    public FunctionType Type { get; private set; }
     public bool ShowFunction { get; set; }
 
 
@@ -91,10 +91,18 @@ public class Function
 
 public class FunctionString
 {
+    public string Content { get; private set; }
+    public bool SuperScript { get; private set; }
 
+    internal FunctionString(string content, bool superscript)
+    {
+        Content = content;
+        SuperScript = superscript;
+    }
 }
 
 public class FunctionStringCollection
 {
-    
+    internal List<FunctionString> _FunctionStrings { get; set; } = [];
+    public FunctionString[] GetFunctionStrings() => [.. _FunctionStrings];
 }

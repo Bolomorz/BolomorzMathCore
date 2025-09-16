@@ -1,15 +1,9 @@
 namespace BolomorzMathCore.Charting.Algorithms;
 
-public class Regression
+public class Regression(List<double> xvalues, List<double> yvalues)
 {
-    protected List<double> X { get; set; }
-    protected List<double> Y { get; set; }
-
-    public Regression(List<double> xvalues, List<double> yvalues)
-    {
-        X = xvalues;
-        Y = yvalues;
-    }
+    protected List<double> X { get; set; } = xvalues;
+    protected List<double> Y { get; set; } = yvalues;
 
     public Function PolynomialRegression(int order)
     {

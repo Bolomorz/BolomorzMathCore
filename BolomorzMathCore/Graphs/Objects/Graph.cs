@@ -1,26 +1,18 @@
 namespace BolomorzMathCore.Graphs;
 
-public class Graph
+public class Graph(GraphType type, GraphWeighting weighting)
 {
-    private List<Vertex> Vertices { get; set; }
+    private List<Vertex> Vertices { get; set; } = [];
     public List<Vertex> GetVertices() => [.. Vertices];
 
-    private List<Edge> Edges { get; set; }
+    private List<Edge> Edges { get; set; } = [];
     public List<Edge> GetEdges() => [.. Edges];
 
-    public GraphType GraphType { get; private set; }
-    public GraphWeighting GraphWeighting { get; private set; }
+    public GraphType GraphType { get; private set; } = type;
+    public GraphWeighting GraphWeighting { get; private set; } = weighting;
 
     private int NextVID = 0;
     private int NextEID = 0;
-
-    public Graph(GraphType type, GraphWeighting weighting)
-    {
-        Vertices = [];
-        Edges = [];
-        GraphType = type;
-        GraphWeighting = weighting;
-    }
 
     public void CreateVertex(string content)
     {
