@@ -1,12 +1,49 @@
 namespace BolomorzMathCore.Matrices;
 
+/// <summary>
+/// <code>
+/// Determinant of Matrix NxN (Quadratic Matrix)
+/// 
+/// Determinant = det(A) or |A| = Complex
+/// 
+/// Matrix A 2x2 = ((a b) (c d)) => det(A) = ad - bc
+/// 
+/// Properties of Matrix A depending on |A|:
+/// - invertibility:    
+///     |A| is not zero => Inverse(A) exists | A is invertible
+/// - area/volume:      
+///     |A| represents parallelogram.area formed by its row- or col-vectors for A=2x2         
+///     |A| is area of figure formed by its row or col-vectors in a N-dimensional system for A=NxN
+/// - linear dependence: 
+///     rows or columns of A are linearly dependent => |A| is zero
+/// - operations:
+///     multiplying a row or column by a scalar k => |Result| = k * |Original|
+///     adding a multiple of row or col to other row or col => |Result| = |Original|
+/// - transpose:
+///     |Transpose(A)| = |A|
+/// 
+/// Calculation of |A|:
+/// - Decomposition of Matrix with Complex.Tolerance for LUP-Algorithm
+/// - Decomposition successful      => LUPDeterminant of LUP-Algorithm | faster
+/// - Decomposition not successful  => SubDeterminant-Algorithm | very slow
+/// </code>
+/// </summary>
+/// <see cref="Complex"/>
+/// <see cref="Matrix"/>
 public class Determinant
 {
     public Complex Value { get; private set; }
 
+    /// <summary>
+    /// <code>
+    /// Determinant of Matrix NxN (Quadratic Matrix)
+    /// 
+    /// Determinant = det(A) or |A| = Complex
+    /// </code>
+    /// </summary>
     public Determinant(Matrix matrix)
     {
-        if(!matrix.IsQuadratic()) throw new Exception("cannot calculate determinant of non quadratric matrix.");
+        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate determinant of non quadratric matrix.");
         var decomposition = LUPDecompose(matrix.GetValues(), matrix.GetRows(), Complex.Tolerance);
         Value = decomposition.Success ?
             LUPDeterminant(decomposition, matrix.GetRows()) :
@@ -23,7 +60,7 @@ public class Determinant
             d *= decomposition.Decompose[i, i];
 
         return (decomposition.P[n] - n) % 2 == 0 ? d : -d;
-        
+
     }
     private static Decomposition LUPDecompose(Complex[,] A, int n, Complex Tol)
     {
@@ -80,7 +117,7 @@ public class Determinant
         }
 
         return new() { Decompose = decompose, P = P, Success = true };
-        
+
     }
     #endregion
 
@@ -106,7 +143,7 @@ public class Determinant
         }
 
         return sub;
-        
+
     }
     private static Complex CalculateDeterminant(Complex[,] m, int n)
     {
@@ -128,7 +165,7 @@ public class Determinant
         }
 
         return sum;
-        
+
     }
     #endregion
 }

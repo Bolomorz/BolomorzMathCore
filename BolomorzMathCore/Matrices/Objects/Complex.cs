@@ -1,29 +1,89 @@
 namespace BolomorzMathCore.Matrices;
 
-
+/// <summary>
+/// <code>
+/// Complex Number
+/// 
+/// Complex = Re + Im * i
+/// Re = Number | Im = Number
+/// 
+/// Operations on Complex A:
+/// - Conjugate:        
+///     Conjugate(A) = Complex | A.Re - A.Im * i
+/// - Square:           
+///     Square(A) = Number | A.Re^2 + A.Im^2
+/// - Absolute:         
+///     Absolute(A) = Number | Sqrt(Square(A))
+/// - Sign:             
+///     Sign(A) = Complex | A.Re/Absolute(A) + A.Im/Absolute(A) * i
+/// - SquareRoot:       
+///     SquareRoot(A) = Complex | Sqrt((A.Re + Absolute(A))/2) + Im/Abs(Im) * Sqrt((-A.Re + Absolute(A))/2) * i
+/// 
+/// Operators Complex A, Complex B, Number N:
+/// - Addition:         
+///     A + B | A + N | N + A = Complex
+/// - Subtraction:      
+///     A - B | A - N | N - A = Complex
+/// - Multiplikation:   
+///     A * B | A * N | N * A = Complex
+/// - Division:         
+///     A / B | A / N | N / A = Complex
+/// - Comparison:       
+///     A greaterthan|lessthan|equalto B = bool
+/// </code>
+/// </summary>
 public class Complex
 {
     public double Re { get; set; }
     public double Im { get; set; }
 
+    /// <summary>
+    /// epsilon + 0 * i
+    /// </summary>
     public static readonly Complex Tolerance = new(double.Epsilon);
+    /// <summary>
+    /// 0 + 0 * i
+    /// </summary>
     public static readonly Complex Zero = new();
 
-    internal Complex(double re, double im)
+    /// <summary>
+    /// <code>
+    /// Complex Number
+    /// 
+    /// Complex = Re + Im * i
+    /// Re = Number | Im = Number
+    /// </code>
+    /// </summary>
+    public Complex(double re, double im)
     {
 
         Re = re;
         Im = im;
 
     }
-    internal Complex(double re)
+    /// <summary>
+    /// <code>
+    /// Complex Number
+    /// 
+    /// Complex = Re + 0 * i
+    /// Re = Number
+    /// </code>
+    /// </summary>
+    public Complex(double re)
     {
 
         Re = re;
         Im = 0;
 
     }
-    internal Complex()
+    /// <summary>
+    /// <code>
+    /// Complex Number
+    /// 
+    /// Complex = 0 + 0 * i
+    /// </code>
+    /// </summary>
+    public Complex()
     {
 
         Re = 0;
@@ -32,14 +92,43 @@ public class Complex
     }
 
     #region Operations
+    /// <summary>
+    /// <code>
+    /// Conjugate:  Conjugate(A) = Complex | A.Re - A.Im * i
+    /// </code>
+    /// </summary>
     public Complex Conjugate()
         => new(Re, -Im);
+
+    /// <summary>
+    /// <code>
+    /// Absolute:   Absolute(A) = Number | Sqrt(Square(A))
+    /// </code>
+    /// </summary>
     public double Absolute()
         => Math.Sqrt(Square());
+
+     /// <summary>
+    /// <code>
+    /// Square:     Square(A) = Number | A.Re^2 + A.Im^2
+    /// </code>
+    /// </summary>
     public double Square()
         => Re * Re + Im * Im;
+
+     /// <summary>
+    /// <code>
+    /// Sign:       Sign(A) = Complex | A.Re/Absolute(A) + A.Im/Absolute(A) * i
+    /// </code>
+    /// </summary>
     public Complex Sign()
         => new(Re / Absolute(), Im / Absolute());
+        
+     /// <summary>
+    /// <code>
+    /// SquareRoot: SquareRoot(A) = Complex | Sqrt((A.Re + Absolute(A))/2) + Im/Abs(Im) * Sqrt((-A.Re + Absolute(A))/2) * i
+    /// </code>
+    /// </summary>
     public Complex SquareRoot()
     {
 
@@ -51,11 +140,11 @@ public class Complex
         }
         else
         {
-            double re = Math.Sqrt((Re + Math.Sqrt(Square())) / 2);
-            double im = (Im / Math.Abs(Im)) * Math.Sqrt((-Re + Math.Sqrt(Square())) / 2);
+            double re = Math.Sqrt((Re + Absolute()) / 2);
+            double im = (Im / Math.Abs(Im)) * Math.Sqrt((-Re + Absolute()) / 2);
             return new(re, im);
         }
-        
+
     }
     #endregion
 

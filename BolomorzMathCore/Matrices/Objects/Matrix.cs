@@ -1,5 +1,73 @@
 namespace BolomorzMathCore.Matrices;
 
+/// <summary>
+/// <code>
+/// Matrix of Complex Numbers
+/// 
+/// Matrix NxM = Complex[N, M]
+/// Element(ij) = Complex(i,j)
+/// Diagonals = [Element(ij) where i=j]
+/// 
+/// Special Types:
+/// - special quadratic (NxN):
+///     zero: all Elements are 0+0i
+///     identity: Diagonals are 1+0i, rest are 0+0i
+/// - matrix array (N):
+///     diagonals: (NxN) Diagonals are the elements of the matrix array, rest are 0+0i
+///     vector: (Nx1) Elements are the elements of the matrix array
+/// - rotation matrix (p, q, x1, x2, N)
+///     (NxN): identity; 
+///     Element(p,q) = (x2/x1) / (1.0 + (x2/x1)^2).SquareRoot()
+///     Element(q,p) = (-1) * (x2/x1) / (1.0 + (x2/x1)^2).SquareRoot()
+///     Element(p,p) = Element(q,q) = 1.0 / (1.0 + (x2/x1)^2).SquareRoot()
+/// 
+/// Getter:
+/// - GetRows: N
+/// - GetCols: M
+/// - GetValues: Complex[N,M]
+/// - GetValue: Element(i,j)
+/// - GetDeterminant: |Matrix|
+/// 
+/// Transformation on Matrix A:
+/// - SubMatrix(i,j): Matrix B
+///     deleting i.row and/or j.column from A
+/// - Transpose: Matrix B
+///     B.Element(i,j) = A.Element(j,i)
+/// - Conjugate: Matrix B
+///     B.Element(i,j) = A.Element(i,j).Conjugate()
+/// - ConjugateTranspose: Matrix B
+///     B = A.Conjugate().Transpose()
+/// - Inverse: Matrix B
+///     A is regular | A is quadratic
+///     B.Element(i,j) = +-|SubMatrix(i,j)| / |A|
+/// 
+/// Properties of Matrix A:
+/// - IsQuadratic: N = M ?
+/// - Trace: Sum(Diagonals(A))
+/// - IsSymmetric: IsQuadratic AND A = Transpose(A) ?
+/// - IsSkewSymmetric: IsQuadratic AND A = -Tranpose(A) ?
+/// - IsComplexMatrix: at least one Element(i,j) with Element(i,j).Im is not 0 ?
+/// - IsOrthogonal: IsQuadratic AND A * Transpose(A) = Identity ?
+/// - IsHermitic: IsQuadratic AND A = ConjugateTranpose(A) ?
+/// - IsSkewHermitic: IsQuadratic AND A = -ConjugateTranspose(A) ?
+/// - IsUnitary: IsQuadratic AND A * ConjugateTranpose(A) = Identity ?
+/// - IsRegular: IsQuadratic AND |A| is not 0 ?
+/// - Rank: Number | A is regular: N | else RankRecursion: less than N (can be slow)
+/// 
+/// Operations of Matrix A, Matrix B, Number N, Complex C:
+/// - Addition:
+///     A + B | WHEN A.Rows = B.Rows AND A.Cols = B.Cols
+/// - Subtraction:
+///     A - B | WHEN A.Rows = B.Rows AND A.Cols = B.Cols
+/// - Multiplikation:
+///     N * A | C * A
+///     A * B | WHEN A.Cols = B.Rows
+/// - Comparing:
+///     A is B | A is not B
+/// </code>
+/// </summary>
+/// <see cref="Complex"/>
+/// <see cref="Matrices.Determinant"/> 
 public class Matrix
 {
 
@@ -8,6 +76,11 @@ public class Matrix
     protected Complex[,] Values;
     protected Complex? Determinant;
 
+    /// <summary>
+    /// <code>
+    /// Matrix 0x0
+    /// </code>
+    /// </summary>
     public Matrix()
     {
 
@@ -17,6 +90,12 @@ public class Matrix
         Values = new Complex[Rows, Cols];
 
     }
+
+    /// <summary>
+    /// <code>
+    /// Matrix Values.NxValues.M
+    /// </code>
+    /// </summary>
     public Matrix(Complex[,] values)
     {
 
@@ -26,6 +105,15 @@ public class Matrix
         Values = values;
 
     }
+
+    /// <summary>
+    /// <code>
+    /// Special Types:
+    /// - special quadratic (NxN):
+    ///     zero: all Elements are 0+0i
+    ///     identity: Diagonals are 1+0i, rest are 0+0i
+    /// </code>
+    /// </summary>
     public Matrix(SpecialQuadratic sq, int n)
     {
 
@@ -52,6 +140,15 @@ public class Matrix
         }
 
     }
+
+    /// <summary>
+    /// <code>
+    /// Special Types:
+    /// - matrix array (N):
+    ///     diagonals: (NxN) Diagonals are the elements of the matrix array, rest are 0+0i
+    ///     vector: (Nx1) Elements are the elements of the matrix array
+    /// </code>
+    /// </summary>
     public Matrix(MatrixArray ma, Complex[] values)
     {
 
@@ -89,6 +186,16 @@ public class Matrix
 
     }
     #region RotationMatrix
+    /// <summary>
+    /// <code>
+    /// Special Types:
+    /// - rotation matrix (p, q, x1, x2, N)
+    ///     (NxN): identity; 
+    ///     Element(p,q) = (x2/x1) / (1.0 + (x2/x1)^2).SquareRoot()
+    ///     Element(q,p) = (-1) * (x2/x1) / (1.0 + (x2/x1)^2).SquareRoot()
+    ///     Element(p,p) = Element(q,q) = 1.0 / (1.0 + (x2/x1)^2).SquareRoot()
+    /// </code>
+    /// </summary>
     public Matrix(int p, int q, Complex x1, Complex x2, int n)
     {
 
@@ -128,17 +235,46 @@ public class Matrix
     #endregion
 
     #region GetAttribute
+    /// <summary>
+    /// <code>
+    /// Matrix NxM: N
+    /// </code>
+    /// </summary>
     public int GetRows()
         => Rows;
+
+    /// <summary>
+    /// <code>
+    /// Matrix NxM: M
+    /// </code>
+    /// </summary>
     public int GetCols()
         => Cols;
+
+    /// <summary>
+    /// <code>
+    /// Complex[N,M]
+    /// </code>
+    /// </summary>
     public Complex[,] GetValues()
         => Values;
+
+    /// <summary>
+    /// <code>
+    /// Element(row,col)
+    /// </code>
+    /// </summary>
     public Complex GetValue(int row, int col)
     {
         if (row > Rows || col > Cols || row < 1 || col < 1) throw new IndexOutOfRangeException();
         return Values[row - 1, col - 1];
     }
+
+    /// <summary>
+    /// <code>
+    /// |Matrix|
+    /// </code>
+    /// </summary>
     public Complex GetDeterminant()
         => Determinant is not null ?
             Determinant :
@@ -146,6 +282,12 @@ public class Matrix
     #endregion
 
     #region Transformation
+    /// <summary>
+    /// <code>
+    /// SubMatrix(i,j): Matrix B
+    ///     deleting i.row and/or j.column from A
+    /// </code>
+    /// </summary>
     public Matrix SubMatrix(int i, int k)
     {
 
@@ -214,8 +356,14 @@ public class Matrix
 
         }
         else return new(Values);
-        
+
     }
+    /// <summary>
+    /// <code>
+    /// Transpose: Matrix B
+    ///     B.Element(i,j) = A.Element(j,i)
+    /// </code>
+    /// </summary>
     public Matrix Transpose()
     {
 
@@ -226,8 +374,14 @@ public class Matrix
                 transpose[col, row] = Values[row, col];
 
         return new(transpose);
-        
+
     }
+    /// <summary>
+    /// <code>
+    /// Conjugate: Matrix B
+    ///     B.Element(i,j) = A.Element(i,j).Conjugate()
+    /// </code>
+    /// </summary>
     public Matrix Conjugate()
     {
 
@@ -238,10 +392,24 @@ public class Matrix
                 conjugate[row, col] = Values[row, col].Conjugate();
 
         return new(conjugate);
-        
+
     }
+    /// <summary>
+    /// <code>
+    /// ConjugateTranspose: Matrix B
+    ///     B = A.Conjugate().Transpose()
+    /// </code>
+    /// </summary>
     public Matrix ConjugateTranspose()
         => Conjugate().Transpose();
+
+    /// <summary>
+    /// <code>
+    /// Inverse: Matrix B
+    ///     A is regular | A is quadratic
+    ///     B.Element(i,j) = +-|SubMatrix(i,j)| / |A|
+    /// </code>
+    /// </summary>
     public Matrix Inverse()
     {
 
@@ -263,13 +431,24 @@ public class Matrix
         }
 
         return new(inverse);
-        
+
     }
     #endregion
 
     #region Properties
+    /// <summary>
+    /// <code>
+    /// IsQuadratic: N = M ?
+    /// </code>
+    /// </summary>
     public bool IsQuadratic()
         => Rows == Cols;
+
+    /// <summary>
+    /// <code>
+    /// Trace: Sum(Diagonals(A))
+    /// </code>
+    /// </summary>
     public Complex Trace()
     {
 
@@ -281,16 +460,33 @@ public class Matrix
             trace += Values[row, row];
 
         return trace;
-        
+
     }
+    /// <summary>
+    /// <code>
+    /// IsSymmetric: IsQuadratic AND A = Transpose(A) ?
+    /// </code>
+    /// </summary>
     public bool IsSymmetric()
         => IsQuadratic() ?
             this == Transpose() :
             false;
+
+    /// <summary>
+    /// <code>
+    /// IsSkewSymmetric: IsQuadratic AND A = -Tranpose(A) ?
+    /// </code>
+    /// </summary>
     public bool IsSkewSymmetric()
         => IsQuadratic() ?
             this == -this.Transpose() :
             false;
+
+    /// <summary>
+    /// <code>
+    /// IsComplexMatrix: at least one Element(i,j) with Element(i,j).Im is not 0 ?
+    /// </code>
+    /// </summary>
     public bool IsComplexMatrix()
     {
 
@@ -298,24 +494,54 @@ public class Matrix
             if (complex.Im != 0) return true;
 
         return false;
-        
+
     }
+
+    /// <summary>
+    /// <code>
+    /// IsOrthogonal: IsQuadratic AND A * Transpose(A) = Identity ?
+    /// </code>
+    /// </summary>
     public bool IsOrthogonal()
         => IsQuadratic() ?
             this * this.Transpose() == new Matrix(SpecialQuadratic.Identity, this.Rows) :
             false;
+
+    /// <summary>
+    /// <code>
+    /// IsHermitic: IsQuadratic AND A = ConjugateTranpose(A) ?
+    /// </code>
+    /// </summary>
     public bool IsHermitic()
         => IsQuadratic() ?
             this == this.ConjugateTranspose() :
             false;
+
+    /// <summary>
+    /// <code>
+    /// IsSkewHermitic: IsQuadratic AND A = -ConjugateTranspose(A) ?
+    /// </code>
+    /// </summary>
     public bool IsSkewHermitic()
         => IsQuadratic() ?
             this == -this.ConjugateTranspose() :
             false;
+
+    /// <summary>
+    /// <code>
+    /// IsUnitary: IsQuadratic AND A * ConjugateTranpose(A) = Identity ?
+    /// </code>
+    /// </summary>
     public bool IsUnitary()
         => IsQuadratic() ?
             this * this.ConjugateTranspose() == new Matrix(SpecialQuadratic.Identity, this.Rows) :
             false;
+
+    /// <summary>
+    /// <code>
+    /// IsRegular: IsQuadratic AND |A| is not 0 ?
+    /// </code>
+    /// </summary>
     public bool IsRegular()
     {
 
@@ -325,8 +551,14 @@ public class Matrix
             return det != Complex.Zero;
         }
         else return false;
-        
+
     }
+
+    /// <summary>
+    /// <code>
+    /// Rank: Number | A is regular: N | else RankRecursion: less than N (can be slow)
+    /// </code>
+    /// </summary>
     public int Rank()
         => IsRegular() ?
             Rows :
@@ -349,7 +581,7 @@ public class Matrix
                 max = i;
 
         return max;
-        
+
     }
     private static int RankRecursion(Matrix m)
     {
@@ -432,7 +664,7 @@ public class Matrix
                 negativ[row, col] = -A.Values[row, col];
 
         return new(negativ);
-        
+
     }
     public static Matrix operator +(Matrix A, Matrix B)
     {
@@ -445,7 +677,7 @@ public class Matrix
             for (int col = 0; col < A.Cols; col++)
                 sum[row, col] = A.Values[row, col] + B.Values[row, col];
         return new(sum);
-        
+
     }
     public static Matrix operator -(Matrix A, Matrix B)
     {
@@ -459,7 +691,7 @@ public class Matrix
                 diff[row, col] = A.Values[row, col] - B.Values[row, col];
 
         return new(diff);
-        
+
     }
     public static Matrix operator *(double A, Matrix B)
     {
@@ -471,7 +703,7 @@ public class Matrix
                 mult[row, col] = A * B.Values[row, col];
 
         return new(mult);
-        
+
     }
     public static Matrix operator *(Complex A, Matrix B)
     {
@@ -505,7 +737,7 @@ public class Matrix
         }
 
         return new(product);
-        
+
     }
     public static bool operator ==(Matrix A, Matrix B)
     {
@@ -518,11 +750,11 @@ public class Matrix
                     return false;
 
         return true;
-        
+
     }
     public static bool operator !=(Matrix A, Matrix B) => !(A == B);
     #endregion
-    
+
     #region ObjectOverrides
     public override string ToString()
         => IsComplexMatrix() ?
