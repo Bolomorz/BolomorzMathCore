@@ -11,6 +11,6 @@ public class QRTransform
         throw new NotImplementedException();
     }
 
-    internal Matrix GetResult() => Matrix; 
+    public Matrix GetResult() => Matrix; 
 
 }

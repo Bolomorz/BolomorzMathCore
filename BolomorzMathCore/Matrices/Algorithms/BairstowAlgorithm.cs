@@ -105,6 +105,6 @@ public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
 
     }
 
-    internal Complex[] GetResult() => EigenValues;
+    public Complex[] GetResult() => EigenValues;
     
 }

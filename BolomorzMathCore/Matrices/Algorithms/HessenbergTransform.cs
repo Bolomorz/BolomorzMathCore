@@ -72,6 +72,6 @@ public class HessenbergTransform
 
     }
 
-    internal Matrix GetResult() => Matrix;
+    public Matrix GetResult() => Matrix;
     
 }

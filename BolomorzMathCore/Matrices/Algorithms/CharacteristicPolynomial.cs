@@ -35,6 +35,6 @@ public class CharacteristicPolynomial
         return C;
     }
 
-    internal Complex[] GetResult() => Polynomial;
+    public Complex[] GetResult() => Polynomial;
     
 }
