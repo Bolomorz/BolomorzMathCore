@@ -1,8 +1,46 @@
 namespace BolomorzMathCore.Charting;
 
+/// <summary>
+/// <code>
+/// Function F
+/// 
+/// function f(x) = y assigning each input from a set of x-values exactly one output from a set of y-values
+/// 
+/// Properties:
+/// - Type: FunctionType | type of function (Line, Polynomial, Exponential, Power, Logarithm)
+/// - ShowFunction: Bool | is function currently shown in chart C ?
+/// 
+/// Getters:
+/// - GetValues: Number[] | values representing the function
+///     Line:           Values[0] + Values[1] * x;
+///     Polynomial:     Sum[i from 0 to n](Values[i] * x^i)
+///     Logarithm:      Values[0] + Values[1] * Math.Log(x);
+///     Power:          Values[0] * Math.Pow(x, Values[1]);
+///     Exponential:    Values[0] * Math.Pow(Values[1], x);
+/// - GetValue(x): Number | value = f(x)
+/// 
+/// Static:
+/// - NaF:                          f(x) = not a function
+/// - Line(coeff0, coeff1):         f(x) = coeff0 + coeff1 * x
+/// - Polynomial(coeff):            f(x) = Sum[i from 0 to n](coeff[i] * x^i)
+/// - Exponential(coeff, base):     f(x) = coeff * base^x
+/// - Power(coeff, expo):           f(x) = coeff * x^expo
+/// - Logarithm(coeff0, coeff1):    f(x) = coeff0 + coeff1 * Log(x)
+/// </code>
+/// </summary>
 public class Function
 {
     protected double[] Values { get; set; }
+    /// <summary>
+    /// <code>
+    /// GetValues: Number[] | values representing the function
+    ///     Line:           Values[0] + Values[1] * x;
+    ///     Polynomial:     Sum[i from 0 to n](Values[i] * x^i)
+    ///     Logarithm:      Values[0] + Values[1] * Math.Log(x);
+    ///     Power:          Values[0] * Math.Pow(x, Values[1]);
+    ///     Exponential:    Values[0] * Math.Pow(Values[1], x);
+    /// </code>
+    /// </summary>
     public double[] GetValues() => [.. Values];
     public FunctionType Type { get; private set; }
     public bool ShowFunction { get; set; }
@@ -15,7 +53,12 @@ public class Function
         ShowFunction = false;
     }
 
-    public double GetYValue(double xvalue)
+    /// <summary>
+    /// <code>
+    /// GetValue(x): Number | value = f(x)
+    /// </code>
+    /// </summary>
+    public double GetValue(double xvalue)
     {
         switch (Type)
         {
@@ -38,57 +81,65 @@ public class Function
     }
 
     /// <summary>
+    /// <code>
     /// f(x) = not a function
     /// </summary>
-    /// <returns></returns>
     public static Function NaF()
         => new([double.NaN], FunctionType.NaF);
 
     /// <summary>
+    /// <code>
     /// f(x) = coeff0 + coeff1 * x
+    /// </code>
     /// </summary>
-    /// <param name="coeff0"></param>
-    /// <param name="coeff1"></param>
-    /// <returns></returns>
     public static Function Line(double coeff0, double coeff1)
         => new([coeff0, coeff1], FunctionType.Line);
 
     /// <summary>
+    /// <code>
     /// f(x) = Sum[i from 0 to n](coeff[i] * x^i)
+    /// </code>
     /// </summary>
-    /// <param name="coeff"></param>
-    /// <returns></returns>
     public static Function Polynomial(double[] coeff)
         => new(coeff, FunctionType.Polynomial);
 
     /// <summary>
+    /// <code>
     /// f(x) = coeff * base0^x
+    /// </code>
     /// </summary>
-    /// <param name="coeff"></param>
-    /// <param name="base0"></param>
-    /// <returns></returns>
     public static Function Exponential(double coeff, double base0)
         => new([coeff, base0], FunctionType.Exponential);
 
     /// <summary>
+    /// <code>
     /// f(x) = coeff * x^expo
+    /// </code>
     /// </summary>
-    /// <param name="coeff"></param>
-    /// <param name="expo"></param>
-    /// <returns></returns>
     public static Function Power(double coeff, double expo)
         => new([coeff, expo], FunctionType.Power);
 
     /// <summary>
+    /// <code>
     /// f(x) = coeff0 + coeff1 * Log(x)
+    /// </code>
     /// </summary>
-    /// <param name="coeff0"></param>
-    /// <param name="coeff1"></param>
-    /// <returns></returns>
     public static Function Logarithm(double coeff0, double coeff1)
         => new([coeff0, coeff1], FunctionType.Logarithm);
 }
 
+/// <summary>
+/// <code>
+/// FunctionString
+/// 
+/// string representing on part of function F
+/// 
+/// Properties:
+/// - Content: String | part of F
+/// - SuperScript: Bool | content is displayed as superscript ?
+/// </code>
+/// </summary>
+/// <see cref="Function"/> 
 public class FunctionString
 {
     public string Content { get; private set; }
@@ -101,6 +152,18 @@ public class FunctionString
     }
 }
 
+/// <summary>
+/// <code>
+/// FunctionStringCollection
+/// 
+/// collection of strings representing parts of function F
+/// 
+/// Getters:
+/// - GetFunctionStrings: FunctionString[] | collection of strings representing parts of function F
+/// </code>
+/// </summary>
+/// <see cref="FunctionString"/> 
+/// <see cref="Function"/> 
 public class FunctionStringCollection
 {
     internal List<FunctionString> _FunctionStrings { get; set; } = [];

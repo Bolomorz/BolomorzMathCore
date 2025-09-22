@@ -1,5 +1,19 @@
 namespace BolomorzMathCore.Charting;
 
+/// <summary>
+/// <code>
+/// Chart C
+/// 
+/// two dimensional chart depicting multiple series (y-axes) in relation to one x-axis
+/// 
+/// Properties:
+/// - Title: String | name/description of C
+/// - Series: Series[] | multiple series (y-axes) of C
+/// - XAxis: Axis | x-axis of C
+/// </code>
+/// </summary>
+/// <see cref="Charting.Series"/> 
+/// <see cref="Axis"/> 
 public class Chart
 {
     public required string Title { get; set; }
