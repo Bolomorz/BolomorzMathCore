@@ -1,11 +1,48 @@
 namespace BolomorzMathCore.Graphs;
 
+/// <summary>
+/// <code>
+/// Graph G
+/// 
+/// graph consisting of vertices and edges
+/// 
+/// Properties:
+/// - GraphType: GraphType | Directed or NonDirected
+/// - GraphWeighting: GraphWeighting | Weighted or NonWeighted
+/// 
+/// Getters:
+/// - GetVertices: Vertex[]
+/// - GetEdges: Edge[]
+/// 
+/// Methods:
+/// - CreateVertex(content): 
+///     create vertex with name/description
+/// - CreateEdge(content, vertex1, vertex2, weighting): 
+///     create edge between vertex1 and vertex2 with name/description and weighting
+/// - IsInGraph(A): 
+///     Graph G contains vertex/edge A ?
+/// </code>
+/// </summary>
+/// <see cref="Vertex"/> 
+/// <see cref="Edge"/>
+/// <see cref="Graphs.GraphType"/> 
+/// <see cref="Graphs.GraphWeighting"/> 
 public class Graph(GraphType type, GraphWeighting weighting)
 {
     private List<Vertex> Vertices { get; set; } = [];
+    /// <summary>
+    /// <code>
+    /// GetVertices: Vertex[] | vertices of graph
+    /// </code>
+    /// </summary>
     public List<Vertex> GetVertices() => [.. Vertices];
 
     private List<Edge> Edges { get; set; } = [];
+    /// <summary>
+    /// <code>
+    /// GetEdges: Edge[] | edges of graph
+    /// </code>
+    /// </summary>
     public List<Edge> GetEdges() => [.. Edges];
 
     public GraphType GraphType { get; private set; } = type;
@@ -14,11 +51,23 @@ public class Graph(GraphType type, GraphWeighting weighting)
     private int NextVID = 0;
     private int NextEID = 0;
 
+    /// <summary>
+    /// <code>
+    /// CreateVertex(content): 
+    ///     create vertex with name/description
+    /// </code>
+    /// </summary>
     public void CreateVertex(string content)
     {
         Vertices.Add(new(NextVID++, content, this));
     }
 
+    /// <summary>
+    /// <code>
+    /// CreateEdge(content, vertex1, vertex2, weighting): 
+    ///     create edge between vertex1 and vertex2 with name/description and weighting
+    /// </code>
+    /// </summary>
     public void CreateEdge(string content, Vertex vertex1, Vertex vertex2, double? weight)
     {
 
@@ -87,6 +136,12 @@ public class Graph(GraphType type, GraphWeighting weighting)
 
     }
 
+    /// <summary>
+    /// <code>
+    /// IsInGraph(A): 
+    ///     graph contains vertex A ?
+    /// </code>
+    /// </summary>
     public bool IsInGraph(Vertex vertex)
     {
         for (int i = 0; i < Vertices.Count; i++)
@@ -95,6 +150,12 @@ public class Graph(GraphType type, GraphWeighting weighting)
         return false;
     }
 
+    /// <summary>
+    /// <code>
+    /// IsInGraph(A): 
+    ///     graph contains edge A ?
+    /// </code>
+    /// </summary>
     public bool IsInGraph(Edge edge)
     {
         for (int i = 0; i < Edges.Count; i++)

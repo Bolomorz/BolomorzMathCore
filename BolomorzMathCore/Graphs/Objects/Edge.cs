@@ -1,5 +1,29 @@
 namespace BolomorzMathCore.Graphs;
 
+/// <summary>
+/// <code>
+/// Edge E of Graph G
+/// 
+/// edge connecting two vertices A, B
+/// 
+/// Properties:
+/// - EID: Number | unique identifier
+/// - Content: String | E name or description
+/// - Weight: Number | how much it costs to move on E | is null when G.Weighting is NonWeighted
+/// - Vertex1: Vertex | Vertex A | StartVertex when G.Type is Directed
+/// - Vertex2: Vertex | Vertex B | EndVertex when G.Type is Directed
+/// 
+/// Methods:
+/// - RemoveFromGraph(): remove E from G
+/// 
+/// Operators Edge A, Edge B:
+/// - A is B | A is not B
+/// </code>
+/// </summary>
+/// <see cref="Vertex"/>
+/// <see cref="Graphs.Graph"/>  
+/// <see cref="GraphType"/> 
+/// <see cref="GraphWeighting"/> 
 public class Edge
 {
     public int EID { get; private set; }
@@ -30,6 +54,11 @@ public class Edge
         Graph = graph;
     }
 
+    /// <summary>
+    /// <code>
+    /// remove edge from its graph
+    /// </code>
+    /// </summary>
     public void RemoveFromGraph()
     {
         Graph.RemoveEdge(this);

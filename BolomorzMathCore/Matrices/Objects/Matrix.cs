@@ -68,6 +68,8 @@ namespace BolomorzMathCore.Matrices;
 /// </summary>
 /// <see cref="Complex"/>
 /// <see cref="Matrices.Determinant"/> 
+/// <see cref="SpecialQuadratic"/> 
+/// <see cref="MatrixArray"/> 
 public class Matrix
 {
 
@@ -93,7 +95,7 @@ public class Matrix
 
     /// <summary>
     /// <code>
-    /// Matrix Values.NxValues.M
+    /// Matrix (Values.N)x(Values.M)
     /// </code>
     /// </summary>
     public Matrix(Complex[,] values)

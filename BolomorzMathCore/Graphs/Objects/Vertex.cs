@@ -1,5 +1,22 @@
 namespace BolomorzMathCore.Graphs;
 
+/// <summary>
+/// <code>
+/// Vertex V of Graph G
+/// 
+/// Properties:
+/// - VID: Number | unique identifier
+/// - Content: String | V name or description
+/// 
+/// Methods:
+/// - RemoveFromGraph(): remove V from G
+/// 
+/// Operators Vertex A, Vertex B:
+/// - A is B | A is not B
+/// </code>
+/// </summary>
+/// <see cref="Edge"/>
+/// <see cref="Graphs.Graph"/> 
 public class Vertex
 {
     public int VID { get; private set; }
@@ -17,6 +34,11 @@ public class Vertex
         Graph = graph;
     }
 
+    /// <summary>
+    /// <code>
+    /// remove vertex from its graph
+    /// </code>
+    /// </summary>
     public void RemoveFromGraph()
     {
         Graph.RemoveVertex(this);
