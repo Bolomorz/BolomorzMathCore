@@ -1,7 +1,218 @@
+# BolomorzMathCore
+
 Library aiming to implement mathematical structures and their algorithms
 
 !!! Work in progress !!!
 
-- Matrices
-- Graphs
-- Charts
+# Table of Contents
+
+# Matrices
+
+> Matrices are implemented as complex matrix, where each element is a complex number.</br>
+> A NxM Matrix is a collection of elements organized in a 2-dimensional structure with N rows and M columns.</br>
+> Several algorithms are implemented to find certain properties of a matrix.</br>
+> The main part of the algorithm section is to find the complex eigenvalues and eigenvectors of a square matrix.
+
+## Complex Number
+
+> The set of complex numbers `C` extend the set of real numbers `R`, adding an imaginary part.</br>
+> Thus a complex number contains a real part `Re` and an imaginary part `Im`.</br>
+> Both parts `Re` and `Im` are real numbers, together describing the complex number.</br>
+> A complex number is described as `complex = Re + Im * i`, with `i` being the imaginary number.</br>
+> There are other ways describing complex numbers, but this description suffices for this implementation.
+
+Therefore the type `Complex` is implemented as follows
+```C#
+class Complex
+{
+    double Re;
+    double Im;
+}
+```
+
+### Operations/Properties
+
+> Operations on a complex number or between complex numbers may change `Re` and `Im`,
+> but `i` stays constant and is not a factor in those operations, it is only used as representation of the imaginary part.
+
+---
+- **Conjugate**:          
+conjugating a complex number describes the negation of the imaginary part, resulting in the `Conjugate`.</br>
+```
+A.Conjugate()   -> Complex: A.Re - A.Im * i;
+```
+---
+- **Square**:     
+squaring a complex number means squaring both real and imaginary parts, resulting in a real number.</br>
+```
+A.Square()      -> Number:  A.Re*A.Re + A.Im*A.Im;
+```
+---
+- **Absolute**:       
+the square-root of the square of a complex number is called the `Absolute`, which is also a real number.</br>
+```
+A.Absolute()    -> Number:  Sqrt(Square(A));
+```
+---
+- **Sign**:               
+the sign of a complex number normalizes it to a unit complex number, representing its normalized direction as a complex number.</br>
+```
+A.Sign()        -> Complex: (A.Re/Absolute(A)) + (A.Im/Absolute(A)) * i;
+```
+---
+- **SquareRoot**:             
+the square-root of a complex number finds the complex number `B` in the equation `A = B * B`, where only `A` is known.</br>
+```
+                            if(A.Im=0 & A.Re<0) 0 - A.Re * i;
+A.SquareRoot()  -> Complex: if(A.Im=0 & A.Re>0) A.Re + 0 * i;
+                            else Sqrt((A.Re+Absolute(A))/2) + (A.Im/Abs(A.Im))*Sqrt((-A.Re+Absolute(A))/2) * i; 
+```
+---
+
+### Operators
+
+> Operators are implemented for `Complex x double` and `Complex x Complex`.</br>
+> `Complex A; Complex B; double D;`
+---
+- **Negation**:
+```
+    -A          -> Complex: (-A.Re) + (-A.Im) * i;
+```
+---
+- **Addition**:         
+```
+    A + B                   (A.Re+B.Re) + (A.Im+B.Im) * i;
+                -> Complex: 
+    A + D                   (A.Re+D) + A.Im * i;
+```
+---
+- **Subtraction**:         
+```
+    A - B                   (A.Re-B.Re) + (A.Im-B.Im) * i;
+    A - D       -> Complex: (A.Re-D) + A.Im * i;
+    D - A                   (ND-A.Re) + A.Im * i;
+```
+---
+- **Multiplication**:         
+```
+    A * B                   (A.Re*B.Re-A.Im*B.Im) + (A.Re*B.Im+B.Re*A.Im) * i
+                -> Complex:
+    A * D                   (A.Re*D) + A.Im * i;
+```
+---
+- **Division**:         
+```
+    A / B                   ((A.Re*B.Re+A.Im*B.Im)/B.Square) + ((B.Re*A.Im-A.Re*B.Im)/B.Square) * i;
+    A / D       -> Complex: (A.Re/D) + (A.Im/D) * i;
+    D / A                   (D*A.Re/A.Square) + (D*A.Im/A.Square) * i;
+```
+---
+- **Comparison**:
+```
+    A = B       -> Bool:    A.Re=B.Re & A.Im=B.Im;
+    A > B       -> Bool:    A.Re > B.Re
+```
+---
+
+
+## Complex Matrix
+
+> A `NxM` Matrix is a collection of elements organized in a 2-dimensional structure with N rows and M columns.</br>
+> Rows and columns `NxM` are called `Dimension` of the matrix.</br>
+> An element `a` is described by its row j and column k, `a(jk)`.</br>
+> The diagonals `AD` of a matrix `A` are all elements `a(jk)` where `j=k`.</br>
+
+Example Matrix `A 2x2`:
+```
+-------------------     
+|        |        |
+| a(1,1) | a(1,2) |
+|        |        |
+-------------------     AD = [a(1,1), a(2,2)];
+|        |        |
+| a(2,1) | a(2,2) |
+|        |        |
+-------------------
+```
+> In a complex matrix all elements `a(jk)` are [Complex](#complex-number) numbers.
+
+### Special Matrices
+
+> There are certain special matrices with unique properties.</br>
+---
+1. Quadratic Matrix:        
+    Quadratic or square matrices have the property `N=M`, their dimension is described as `NxN` instead.
+    - Zero Matrix `O NxN`:             
+    All elements `o(jk)` are zero:</br>
+    ```
+    o(jk): (0 + 0i) | for all combinations (j,k) (j<=N; k<=N)
+    ```
+    - Identity `I NxN`:         
+    All diagonals `ID` are one, rest are zero:</br>
+    ```
+    i(jk): j=k? (1 + 0i) : (0 + 0i) | for all combinations (j,k) (j<=N; k<=N)
+    ```
+---
+2. Matrix Array:
+    Matrix arrays are defined by a 1-dimensional set of elements `E Nx1`.
+    - Diagonal `D NxN`:     
+    All diagonals `DD` are elements of `E`, rest are zero:</br>
+    ```
+    d(jk): j=k? e(j) : (0 + 0i) | for all combinations (j,k) (j<=N; k<=N)
+    ```
+    - Vector Matrix `V Nx1`:        
+    Vector matrix are elements of `E`:</br>
+    ```
+    v(jk): e(j) | for all combinations (j,k) (j<=N; k=1)
+    ```
+---
+3. Rotation Matrix:
+    Rotation matrices are defined by index `p & q`, 2 complex numbers `x1, x2` and dimension `N`.</br>
+    The result is an Identity `R NxN`, with rules for elements combined by index `p & q`:</br>
+    ```
+    r(jk): j=k? (1 + 0i) : (0 + 0i) | for all combinations (j,k) (j<=N; k<=N);
+    r(pq): (x2/x1) / (1.0 + (x2/x1)(x2/x1)).SquareRoot;
+    r(qp): (-1) * (x2/x1) / (1.0 + (x2/x1)(x2/x1)).SquareRoot;
+    r(pp) & r(qq): 1.0 / (1.0 + (x2/x1)(x2/x1)).SquareRoot;
+    ```
+---
+
+### Transformations 
+
+> Transformations can be done on Matrix `A`, resulting in a Matrix `B`.</br>
+---
+- (A NxM).SubMatrix(j, k):      
+    This transformation results in matrix `B N-1xM-1 | N-1xM | NxM-1` depending on input `j & k`.</br>
+    If j is non-zero, the j. row of `A` will be removed from `B`.
+    If k is non-zero, the k. column of `A` will be removed from `B`.</br>
+    All other elements stay the same.
+---
+- (A NxM).Transpose:
+    This transformation results in matrix `B MxN`, swapping elements row/column wise.</br>
+    ```
+    b(kj): a(jk) | for all combinations (j,k) (j<=N; k<=M)
+    ```
+---
+- (A NxM).Conjugate:
+    This transformation results in matrix `B NxM`, [conjugating](#operationsproperties) all elements.</br>
+    ```
+    b(jk): a(jk).Conjugate | for all combinations (j,k) (j<=N; k<=M)
+    ```
+---
+
+### Properties
+
+> Properties are defined for matrices.</br>
+
+- Quadratic:
+    Quadratic or square matrices have the property `N=M`, their dimension is described as `NxN` instead.
+
+
+## Determinant
+
+## Algorithms - Finding Eigenvalues
+
+# Graphs
+
+# Charts
+
