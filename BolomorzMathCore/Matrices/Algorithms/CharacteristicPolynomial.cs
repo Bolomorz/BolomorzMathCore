@@ -1,23 +1,25 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Matrices.Algorithms;
 
 public class CharacteristicPolynomial
 {
-    
+
     protected Complex[] Polynomial { get; set; }
 
-    public CharacteristicPolynomial(Matrix matrix)
+    public CharacteristicPolynomial(CMatrix matrix)
     {
         if (!matrix.IsQuadratic()) throw new Exception("cannot calculate CharacteristicPolynomial of non quadratic matrix.");
         Polynomial = FaddeevLeVerrier(matrix);
     }
 
-    private static Complex[] FaddeevLeVerrier(Matrix H)
+    private static Complex[] FaddeevLeVerrier(CMatrix H)
     {
 
         int n = H.GetRows();
 
         Complex[] C = new Complex[n];
-        Matrix[] M = new Matrix[n];
+        CMatrix[] M = new CMatrix[n];
 
         int k = 2;
 
@@ -27,7 +29,7 @@ public class CharacteristicPolynomial
 
         while (k <= n)
         {
-            M[k - 1] = H * M[k - 2] + C[n - k] * new Matrix(SpecialQuadratic.Identity, n);
+            M[k - 1] = H * M[k - 2] + C[n - k] * new CMatrix(SpecialQuadratic.Identity, n);
             C[n - k - 1] = -(1 / k) * (H * M[k - 1]).Trace();
             k++;
         }
@@ -36,5 +38,5 @@ public class CharacteristicPolynomial
     }
 
     public Complex[] GetResult() => Polynomial;
-    
+
 }

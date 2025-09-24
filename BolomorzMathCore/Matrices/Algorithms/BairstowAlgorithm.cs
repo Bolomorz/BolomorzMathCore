@@ -1,3 +1,5 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Matrices.Algorithms;
 
 public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
@@ -77,13 +79,13 @@ public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
 
             Complex g = B[1] - u * F[0] - v * F[1];
             Complex h = B[0] - v * F[0];
-            
+
             Complex det = v * g * g + h * (h - u * g);
 
             u -= (-h * c + g * d) / det;
             v -= (-g * v * c + (g * u - h) * d) / det;
             iteration++;
-            
+
         }
 
         Complex[] result = new Complex[n - 1];
@@ -106,5 +108,5 @@ public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
     }
 
     public Complex[] GetResult() => EigenValues;
-    
+
 }

@@ -1,17 +1,19 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Matrices.Algorithms;
 
 public class HessenbergTransform
 {
 
-    protected Matrix Matrix { get; set; }
+    protected CMatrix Matrix { get; set; }
 
-    public HessenbergTransform(Matrix matrix)
+    public HessenbergTransform(CMatrix matrix)
     {
         if (!matrix.IsQuadratic()) throw new Exception("cannot calculate HessenbergTransform of non quadratic matrix.");
         Matrix = CalculateHessenbergTransform(matrix);
     }
 
-    private static Matrix CalculateHessenbergTransform(Matrix m)
+    private static CMatrix CalculateHessenbergTransform(CMatrix m)
     {
 
         int n = m.GetRows();
@@ -72,6 +74,6 @@ public class HessenbergTransform
 
     }
 
-    public Matrix GetResult() => Matrix;
-    
+    public CMatrix GetResult() => Matrix;
+
 }

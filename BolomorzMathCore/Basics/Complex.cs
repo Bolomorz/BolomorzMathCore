@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Matrices;
+namespace BolomorzMathCore.Basics;
 
 /// <summary>
 /// <code>
@@ -61,6 +61,16 @@ public class Complex
         Im = im;
 
     }
+    public Complex(Complex complex)
+    {
+        Re = complex.Re;
+        Im = complex.Im;
+    }
+    public Complex(Number re)
+    {
+        Re = re.Re;
+        Im = 0;
+    }
     /// <summary>
     /// <code>
     /// Complex Number
@@ -105,16 +115,16 @@ public class Complex
     /// Absolute:   Absolute(A) = Number | Sqrt(Square(A))
     /// </code>
     /// </summary>
-    public double Absolute()
-        => Math.Sqrt(Square());
+    public Number Absolute()
+        => new(Math.Sqrt(Square().Re));
 
      /// <summary>
     /// <code>
     /// Square:     Square(A) = Number | A.Re^2 + A.Im^2
     /// </code>
     /// </summary>
-    public double Square()
-        => Re * Re + Im * Im;
+    public Number Square()
+        => new(Re * Re + Im * Im);
 
      /// <summary>
     /// <code>
@@ -122,7 +132,7 @@ public class Complex
     /// </code>
     /// </summary>
     public Complex Sign()
-        => new(Re / Absolute(), Im / Absolute());
+        => new(Re / Absolute().Re, Im / Absolute().Re);
         
      /// <summary>
     /// <code>
@@ -140,8 +150,8 @@ public class Complex
         }
         else
         {
-            double re = Math.Sqrt((Re + Absolute()) / 2);
-            double im = (Im / Math.Abs(Im)) * Math.Sqrt((-Re + Absolute()) / 2);
+            double re = Math.Sqrt((Re + Absolute().Re) / 2);
+            double im = (Im / Math.Abs(Im)) * Math.Sqrt((-Re + Absolute().Re) / 2);
             return new(re, im);
         }
 
@@ -160,6 +170,10 @@ public class Complex
         => new(A + B.Re, B.Im);
     public static Complex operator +(Complex A, double B)
         => new(A.Re + B, A.Im);
+    public static Complex operator +(Number A, Complex B)
+        => new(A.Re + B.Re, B.Im);
+    public static Complex operator +(Complex A, Number B)
+        => new(A.Re + B.Re, A.Im);
 
     public static Complex operator -(Complex A, Complex B)
         => new(A.Re - B.Re, A.Im - B.Im);
@@ -167,6 +181,10 @@ public class Complex
         => new(A - B.Re, B.Im);
     public static Complex operator -(Complex A, double B)
         => new(A.Re - B, A.Im);
+    public static Complex operator -(Number A, Complex B)
+        => new(A.Re - B.Re, B.Im);
+    public static Complex operator -(Complex A, Number B)
+        => new(A.Re - B.Re, A.Im);
 
     public static Complex operator *(Complex A, Complex B)
         => new(A.Re * B.Re - A.Im * B.Im, A.Re * B.Im + B.Re * A.Im);
@@ -174,21 +192,35 @@ public class Complex
         => new(A * B.Re, A * B.Im);
     public static Complex operator *(Complex A, double B)
         => new(A.Re * B, B * A.Im);
+    public static Complex operator *(Number A, Complex B)
+        => new(A.Re * B.Re, A.Re * B.Im);
+    public static Complex operator *(Complex A, Number B)
+        => new(A.Re * B.Re, B.Re * A.Im);
 
     public static Complex operator /(Complex A, Complex B)
     {
         if (B.Re == 0 && B.Im == 0) throw new DivideByZeroException();
-        return new((A.Re * B.Re + A.Im * B.Im) / B.Square(), (B.Re * A.Im - A.Re * B.Im) / B.Square());
+        return new((A.Re * B.Re + A.Im * B.Im) / B.Square().Re, (B.Re * A.Im - A.Re * B.Im) / B.Square().Re);
     }
     public static Complex operator /(double A, Complex B)
     {
         if (B.Re == 0 && B.Im == 0) throw new DivideByZeroException();
-        return new(A * B.Re / B.Square(), A * B.Im / B.Square());
+        return new(A * B.Re / B.Square().Re, A * B.Im / B.Square().Re);
     }
     public static Complex operator /(Complex A, double B)
     {
         if (B == 0) throw new DivideByZeroException();
         return new(A.Re / B, A.Im / B);
+    }
+    public static Complex operator /(Number A, Complex B)
+    {
+        if (B.Re == 0 && B.Im == 0) throw new DivideByZeroException();
+        return new(A.Re * B.Re / B.Square().Re, A.Re * B.Im / B.Square().Re);
+    }
+    public static Complex operator /(Complex A, Number B)
+    {
+        if (B.Re == 0) throw new DivideByZeroException();
+        return new(A.Re / B.Re, A.Im / B.Re);
     }
 
     public static bool operator ==(Complex A, Complex B)
@@ -215,8 +247,6 @@ public class Complex
     public override int GetHashCode()
         => Re.GetHashCode() + Im.GetHashCode();
     public override bool Equals(object? obj)
-        => (obj == null || !(obj is Complex)) ?
-            false :
-            this == (Complex)obj;
+        => obj != null && obj is Complex && this == (Complex)obj;
     #endregion
 }

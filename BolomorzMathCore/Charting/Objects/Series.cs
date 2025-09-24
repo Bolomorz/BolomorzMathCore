@@ -70,14 +70,7 @@ public class Series(string name, string unit, Color color)
     /// </summary>
     public void Regression(FunctionType type, int order)
     {
-        var xvalues = new List<double>();
-        var yvalues = new List<double>();
-        foreach (var value in _Values.OrderBy(value => value.X))
-        {
-            xvalues.Add(value.X);
-            yvalues.Add(value.Y);
-        }
-        var reg = new Regression(xvalues, yvalues);
+        var reg = new Regression(_Values);
 
         switch (type)
         {

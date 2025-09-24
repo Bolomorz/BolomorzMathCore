@@ -3,14 +3,14 @@ namespace BolomorzMathCore.Matrices.Algorithms;
 public class QRTransform
 {
     
-    protected Matrix Matrix { get; set; }
+    protected CMatrix Matrix { get; set; }
 
     internal QRTransform(HessenbergTransform hessenberg)
     {
-        Matrix hbt = hessenberg.GetResult();
+        CMatrix hbt = hessenberg.GetResult();
         throw new NotImplementedException();
     }
 
-    public Matrix GetResult() => Matrix; 
+    public CMatrix GetResult() => Matrix; 
 
 }

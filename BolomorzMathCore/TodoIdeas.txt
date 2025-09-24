@@ -1,0 +1,53 @@
+Matrix:
+    decompositions, norm
+Vector: 
+    operations, crossproduct, norm, angle
+    vector geometry: distance, angle, projection
+Statistic: 
+    mean, median, mode, variance, standard deviation
+    normal, binomial, poisson, exponential distribution
+    t-test, chi-square, anova
+    pearson correlation, spearman correlation, multiple regression
+Optimization:
+    linear: simplex, interior-point
+    nonlinear: gradient descent, newton, conjugate gradient
+    constrained: lagrange multiplier, kkt conditions
+Fourier Analysis:
+    DFT, FFT, Inverse
+Signal:
+    filtering: lowpass, highpass, bandpass
+    convolution: discrete, continuous
+    wavelet transform: discrete, continuous
+Geometry:
+    analytic: line, plane, circle, ellipse
+    transformation, rotation, translation, scaling, reflection
+Algebra:
+    group theory: group, subgroup, homomorphisms
+    ring theory: ring, ideals, fields
+    field theory: finite fields, algebraic extension
+Combinatoric:
+    permutations/combinations: factorials, binomial coefficients
+    graph theory: coloring, hamiltonian/eulerian paths
+    counting: inclusion/exclusion, pigeonhole
+Machine Learning:
+    linear regression, logistic regression, k-means clustering
+    neural network: feedforward, backpropagation
+    support vector machines: linear, nonlinear
+Symbolic Computation:
+    simplification, expansion, factorization
+    differentiation, integration
+    solving polynomials, differential equations
+Data Structures:
+    sorting, searching, trees, graphs, heaps, stacks, queues
+Numerical Stability/Error Analysis:
+    condition numbers of matrices
+    error propagation in numerical computations
+    stability of numerical methods
+Multivariate Calculus
+    partial derivatives: gradient, hessian matrix
+    multiple integrals: double, triple
+    vector calculus: divergence, curl, laplacian
+Differential Geometry:
+    curves/surface: parametric
+    tensors: covariant and contravariant
+    riemannian geometry: metric tensors, curvature

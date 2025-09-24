@@ -1,10 +1,12 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Matrices;
 
 /// <summary>
 /// <code>
-/// Determinant of Matrix NxN (Quadratic Matrix)
+/// Determinant[Real] of Matrix[Real]  NxN (Quadratic Matrix)
 /// 
-/// Determinant = det(A) or |A| = Complex
+/// Determinant[Real]  = det(A) or |A| = [Real]
 /// 
 /// Matrix A 2x2 = ((a b) (c d)) => det(A) = ad - bc
 /// 
@@ -28,49 +30,35 @@ namespace BolomorzMathCore.Matrices;
 /// - Decomposition not successful  => SubDeterminant-Algorithm | very slow
 /// </code>
 /// </summary>
-/// <see cref="Complex"/>
-/// <see cref="Matrix"/>
-public class Determinant
+/// <see cref="NMatrix"/>
+public class NDeterminant : Determinant<Number>
 {
-    public Complex Value { get; private set; }
+    public override Number Value { get; protected set; }
 
     /// <summary>
     /// <code>
-    /// Determinant of Matrix NxN (Quadratic Matrix)
+    /// Determinant[Real]  of Matrix[Real]  NxN (Quadratic Matrix)
     /// 
-    /// Determinant = det(A) or |A| = Complex
+    /// Determinant[Real]  = det(A) or |A| = [Real]
     /// </code>
     /// </summary>
-    public Determinant(Matrix matrix)
+    public NDeterminant(NMatrix matrix)
     {
         if (!matrix.IsQuadratic()) throw new Exception("cannot calculate determinant of non quadratric matrix.");
-        var decomposition = LUPDecompose(matrix.GetValues(), matrix.GetRows(), Complex.Tolerance);
+        var decomposition = LUPDecompose(matrix.GetValues(), matrix.GetRows(), Number.Tolerance);
         Value = decomposition.Success ?
             LUPDeterminant(decomposition, matrix.GetRows()) :
             CalculateDeterminant(matrix.GetValues(), matrix.GetRows());
     }
 
-    #region LUP Algorithm - Faster
-    private static Complex LUPDeterminant(Decomposition decomposition, int n)
+    protected override Decomposition LUPDecompose(Number[,] A, int n, Number Tol)
     {
-
-        Complex d = decomposition.Decompose[0, 0];
-
-        for (int i = 1; i < n; i++)
-            d *= decomposition.Decompose[i, i];
-
-        return (decomposition.P[n] - n) % 2 == 0 ? d : -d;
-
-    }
-    private static Decomposition LUPDecompose(Complex[,] A, int n, Complex Tol)
-    {
-
         int i, j, k, imax;
-        Complex maxA, absA;
-        Complex[] ptr = new Complex[n];
+        Number maxA, absA;
+        Number[] ptr = new Number[n];
 
         int[] P = new int[n + 1];
-        Complex[,] decompose = new Complex[n, n];
+        Number[,] decompose = new Number[n, n];
 
         for (i = 0; i < n; i++)
             for (j = 0; j < n; j++)
@@ -80,12 +68,12 @@ public class Determinant
 
         for (i = 0; i < n; i++)
         {
-            maxA = new Complex();
+            maxA = new(0);
             imax = i;
 
             for (k = i; k < n; k++)
             {
-                absA = new Complex(decompose[k, i].Absolute());
+                absA = new(decompose[k, i].Absolute().Re);
                 if (absA > maxA)
                 {
                     maxA = absA;
@@ -117,22 +105,28 @@ public class Determinant
         }
 
         return new() { Decompose = decompose, P = P, Success = true };
-
     }
-    #endregion
 
-    #region SubDeterminant Algorithm - Very Slow
-    private static Complex[,] SubMatrix(Complex[,] m, int i, int k, int n)
+    protected override Number LUPDeterminant(Decomposition decomposition, int n)
     {
+        Number d = decomposition.Decompose[0, 0];
 
-        Complex[,] sub = new Complex[n - 1, n - 1];
+        for (int i = 1; i < n; i++)
+            d *= decomposition.Decompose[i, i];
+
+        return (decomposition.P[n] - n) % 2 == 0 ? d : -d;
+    }
+
+    protected override Number[,] SubMatrix(Number[,] m, int j, int k, int n)
+    {
+        Number[,] sub = new Number[n - 1, n - 1];
 
         int subrow = 0;
         int subcol;
-        i--; k--;
+        j--; k--;
         for (int row = 0; row < n; row++)
         {
-            if (row != i)
+            if (row != j)
             {
                 subcol = 0;
                 for (int col = 0; col < n; col++)
@@ -143,36 +137,26 @@ public class Determinant
         }
 
         return sub;
-
     }
-    private static Complex CalculateDeterminant(Complex[,] m, int n)
-    {
 
+    protected override Number CalculateDeterminant(Number[,] m, int n)
+    {
         if (n == 2) return m[0, 0] * m[1, 1] - m[0, 1] * m[1, 0];
 
-        Complex sum = new();
-        List<Complex> dets = new();
+        Number sum = new(0);
+        List<Number> dets = [];
 
         for (int i = 1; i <= n; i++)
             dets.Add(CalculateDeterminant(SubMatrix(m, 1, i, n), n - 1));
 
         for (int col = 1; col <= n; col++)
         {
-            Complex sub = dets[col - 1];
+            Number sub = dets[col - 1];
             sum += (col + 1) % 2 == 0 ?
                 m[0, col - 1] * sub :
                 -1 * m[0, col - 1] * sub;
         }
 
         return sum;
-
     }
-    #endregion
-}
-
-internal struct Decomposition
-{
-    internal required bool Success { get; set; }
-    internal required Complex[,] Decompose { get; set; }
-    internal required int[] P { get; set; }
 }
