@@ -1,6 +1,7 @@
 using BolomorzMathCore.Basics;
+using BolomorzMathCore.LinearAlgebra.Generics;
 
-namespace BolomorzMathCore.Matrices;
+namespace BolomorzMathCore.LinearAlgebra.Matrix;
 
 /// <summary>
 /// <code>
@@ -31,27 +32,9 @@ namespace BolomorzMathCore.Matrices;
 /// </code>
 /// </summary>
 /// <see cref="NMatrix"/>
-public class NDeterminant : Determinant<Number>
+public class NDeterminant(NMatrix matrix) : DeterminantBase<Number, NMatrix>(matrix)
 {
-    public override Number Value { get; protected set; }
-
-    /// <summary>
-    /// <code>
-    /// Determinant[Real]  of Matrix[Real]  NxN (Quadratic Matrix)
-    /// 
-    /// Determinant[Real]  = det(A) or |A| = [Real]
-    /// </code>
-    /// </summary>
-    public NDeterminant(NMatrix matrix)
-    {
-        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate determinant of non quadratric matrix.");
-        var decomposition = LUPDecompose(matrix.GetValues(), matrix.GetRows(), Number.Tolerance);
-        Value = decomposition.Success ?
-            LUPDeterminant(decomposition, matrix.GetRows()) :
-            CalculateDeterminant(matrix.GetValues(), matrix.GetRows());
-    }
-
-    protected override Decomposition LUPDecompose(Number[,] A, int n, Number Tol)
+    protected override Decomposition LUPDecompose(Number[,] A, int n)
     {
         int i, j, k, imax;
         Number maxA, absA;
@@ -81,7 +64,7 @@ public class NDeterminant : Determinant<Number>
                 }
             }
 
-            if (maxA < Tol)
+            if (maxA < Number.Tolerance)
                 return new() { Decompose = decompose, P = P, Success = false };
 
             if (imax != i)

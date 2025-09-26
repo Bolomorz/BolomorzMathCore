@@ -1,6 +1,7 @@
 using BolomorzMathCore.Basics;
+using BolomorzMathCore.LinearAlgebra.Generics;
 
-namespace BolomorzMathCore.Matrices;
+namespace BolomorzMathCore.LinearAlgebra.Matrix;
 
 /// <summary>
 /// <code>
@@ -32,26 +33,8 @@ namespace BolomorzMathCore.Matrices;
 /// </summary>
 /// <see cref="Complex"/>
 /// <see cref="CMatrix"/>
-public class CDeterminant : Determinant<Complex>
+public class CDeterminant(CMatrix matrix) : DeterminantBase<Complex, CMatrix>(matrix)
 {
-    public override Complex Value { get; protected set; }
-
-    /// <summary>
-    /// <code>
-    /// Determinant[Complex] of Matrix[Complex] NxN (Quadratic Matrix)
-    /// 
-    /// Determinant[Complex] = det(A) or |A| = [Complex]
-    /// </code>
-    /// </summary>
-    public CDeterminant(CMatrix matrix)
-    {
-        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate determinant of non quadratric matrix.");
-        var decomposition = LUPDecompose(matrix.GetValues(), matrix.GetRows(), Complex.Tolerance);
-        Value = decomposition.Success ?
-            LUPDeterminant(decomposition, matrix.GetRows()) :
-            CalculateDeterminant(matrix.GetValues(), matrix.GetRows());
-    }
-
     protected override Complex LUPDeterminant(Decomposition decomposition, int n)
     {
         Complex d = decomposition.Decompose[0, 0];
@@ -62,7 +45,7 @@ public class CDeterminant : Determinant<Complex>
         return (decomposition.P[n] - n) % 2 == 0 ? d : -d;
     }
 
-    protected override Decomposition LUPDecompose(Complex[,] A, int n, Complex Tol)
+    protected override Decomposition LUPDecompose(Complex[,] A, int n)
     {
         int i, j, k, imax;
         Complex maxA, absA;
@@ -92,7 +75,7 @@ public class CDeterminant : Determinant<Complex>
                 }
             }
 
-            if (maxA < Tol)
+            if (maxA < Complex.Tolerance)
                 return new() { Decompose = decompose, P = P, Success = false };
 
             if (imax != i)

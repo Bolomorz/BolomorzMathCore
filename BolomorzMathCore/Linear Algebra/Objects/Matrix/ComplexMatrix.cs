@@ -1,21 +1,22 @@
 using BolomorzMathCore.Basics;
+using BolomorzMathCore.LinearAlgebra.Generics;
 
-namespace BolomorzMathCore.Matrices;
+namespace BolomorzMathCore.LinearAlgebra.Matrix;
 
 /// <summary>
 /// <code>
-/// Matrix of Real Numbers
+/// Matrix of Complex Numbers
 /// 
-/// Matrix NxM = Real[N, M]
-/// Element(ij) = Real(i,j)
+/// Matrix NxM = Complex[N, M]
+/// Element(ij) = Complex(i,j)
 /// Diagonals = [Element(ij) where i=j]
 /// 
 /// Special Types:
 /// - special quadratic (NxN):
-///     zero: all Elements are 0
-///     identity: Diagonals are 1, 0
+///     zero: all Elements are 0+0i
+///     identity: Diagonals are 1+0i, rest are 0+0i
 /// - matrix array (N):
-///     diagonals: (NxN) Diagonals are the elements of the matrix array, rest are 0
+///     diagonals: (NxN) Diagonals are the elements of the matrix array, rest are 0+0i
 ///     vector: (Nx1) Elements are the elements of the matrix array
 /// - rotation matrix (p, q, x1, x2, N)
 ///     (NxN): identity; 
@@ -26,7 +27,7 @@ namespace BolomorzMathCore.Matrices;
 /// Getter:
 /// - GetRows: N
 /// - GetCols: M
-/// - GetValues: Real[N,M]
+/// - GetValues: Complex[N,M]
 /// - GetValue: Element(i,j)
 /// - GetDeterminant: |Matrix|
 /// 
@@ -35,6 +36,10 @@ namespace BolomorzMathCore.Matrices;
 ///     deleting i.row and/or j.column from A
 /// - Transpose: Matrix B
 ///     B.Element(i,j) = A.Element(j,i)
+/// - Conjugate: Matrix B
+///     B.Element(i,j) = A.Element(i,j).Conjugate()
+/// - ConjugateTranspose: Matrix B
+///     B = A.Conjugate().Transpose()
 /// - Inverse: Matrix B
 ///     A is regular | A is quadratic
 ///     B.Element(i,j) = +-|SubMatrix(i,j)| / |A|
@@ -44,7 +49,11 @@ namespace BolomorzMathCore.Matrices;
 /// - Trace: Sum(Diagonals(A))
 /// - IsSymmetric: IsQuadratic AND A = Transpose(A) ?
 /// - IsSkewSymmetric: IsQuadratic AND A = -Tranpose(A) ?
+/// - IsComplexMatrix: at least one Element(i,j) with Element(i,j).Im is not 0 ?
 /// - IsOrthogonal: IsQuadratic AND A * Transpose(A) = Identity ?
+/// - IsHermitic: IsQuadratic AND A = ConjugateTranpose(A) ?
+/// - IsSkewHermitic: IsQuadratic AND A = -ConjugateTranspose(A) ?
+/// - IsUnitary: IsQuadratic AND A * ConjugateTranpose(A) = Identity ?
 /// - IsRegular: IsQuadratic AND |A| is not 0 ?
 /// - Rank: Number | A is regular: N | else RankRecursion: less than N (can be slow)
 /// 
@@ -60,37 +69,20 @@ namespace BolomorzMathCore.Matrices;
 ///     A is B | A is not B
 /// </code>
 /// </summary>
-/// <see cref="NDeterminant"/> 
+/// <see cref="Complex"/>
+/// <see cref="CDeterminant"/> 
 /// <see cref="SpecialQuadratic"/> 
 /// <see cref="MatrixArray"/> 
-public class NMatrix : Matrix<Number>
+public class CMatrix : MatrixBase<Complex>
 {
-    /// <summary>
-    /// <code>
-    /// Matrix 0x0
-    /// </code>
-    /// </summary>
-    public NMatrix()
-    {
-        Rows = 0;
-        Cols = 0;
-        Determinant = null;
-        Values = new Number[0, 0];
-    }
     /// <summary>
     /// <code>
     /// Matrix (Values.N)x(Values.M)
     /// </code>
     /// </summary>
-    public NMatrix(Number[,] values)
-    {
+    public CMatrix(Complex[,] values) :
+    base(values.GetLength(0), values.GetLength(1), values) { }
 
-        Rows = values.GetLength(0);
-        Cols = values.GetLength(1);
-        Determinant = null;
-        Values = values;
-
-    }
     /// <summary>
     /// <code>
     /// Special Types:
@@ -99,32 +91,28 @@ public class NMatrix : Matrix<Number>
     ///     identity: Diagonals are 1+0i, rest are 0+0i
     /// </code>
     /// </summary>
-    public NMatrix(SpecialQuadratic sq, int n)
+    public CMatrix(SpecialQuadratic sq, int n) :
+    base(n, n, new Complex[n,n])
     {
-
-        Rows = n;
-        Cols = n;
-        Determinant = null;
-        Values = new Number[Rows, Cols];
-
 
         switch (sq)
         {
             case SpecialQuadratic.Zero:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
-                        Values[row, col] = new(0);
+                        Values[row, col] = new Complex();
                 break;
             case SpecialQuadratic.Identity:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = row != col ?
-                            new(0) :
-                            new(1);
+                            new Complex() :
+                            new Complex(1);
                 break;
         }
 
     }
+
     /// <summary>
     /// <code>
     /// Special Types:
@@ -133,42 +121,40 @@ public class NMatrix : Matrix<Number>
     ///     vector: (Nx1) Elements are the elements of the matrix array
     /// </code>
     /// </summary>
-    public NMatrix(MatrixArray ma, Number[] values)
+    public CMatrix(MatrixArray ma, Complex[] values) :
+    base(
+        values.Length,
+        ma == MatrixArray.Diagonals ? values.Length :
+        ma == MatrixArray.Vector ? 1 :
+        0,
+        new Complex[
+            values.Length,
+            ma == MatrixArray.Diagonals ? values.Length :
+            ma == MatrixArray.Vector ? 1 :
+            0
+        ]
+    )
     {
 
         switch (ma)
         {
             case MatrixArray.Diagonals:
-                Rows = values.Length;
-                Cols = values.Length;
-                Determinant = null;
-                Values = new Number[Rows, Cols];
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = row == col ?
                             values[row] :
-                            new(0);
+                            new Complex();
                 break;
 
             case MatrixArray.Vector:
-                Rows = values.Length;
-                Cols = 1;
-                Determinant = null;
-                Values = new Number[Rows, Cols];
                 for (int row = 0; row < Rows; row++)
                     Values[row, 0] = values[row];
-                break;
-
-            default:
-                Rows = 0;
-                Cols = 0;
-                Determinant = null;
-                Values = new Number[Rows, Cols];
                 break;
 
         }
 
     }
+
     /// <summary>
     /// <code>
     /// Special Types:
@@ -179,42 +165,49 @@ public class NMatrix : Matrix<Number>
     ///     Element(p,p) = Element(q,q) = 1.0 / (1.0 + (x2/x1)^2).SquareRoot()
     /// </code>
     /// </summary>
-    public NMatrix(int p, int q, Number x1, Number x2, int n)
+    public CMatrix(int p, int q, Complex x1, Complex x2, int n) :
+    base(n, n, new Complex[n,n])
     {
 
-        Number sin, cos;
+        Complex sin, cos;
 
-        if (x1 == Number.Zero)
+        if (x1 == Complex.Zero)
         {
             sin = new(1);
-            cos = new(0);
+            cos = new();
         }
         else
         {
-            Number tan = x2 / x1;
+            Complex tan = x2 / x1;
             sin = tan / (1.0 + tan * tan).SquareRoot();
             cos = 1.0 / (1.0 + tan * tan).SquareRoot();
         }
 
-        Number[,] rot = new Number[n, n];
-
         for (int i = 0; i < n; i++)
             for (int j = 0; j < n; j++)
-                rot[i, j] = i == j ?
+                Values[i, j] = i == j ?
                     new(1) :
-                    new(0);
+                    new();
 
-        rot[p, q] = sin;
-        rot[q, p] = -sin;
-        rot[p, p] = cos;
-        rot[q, q] = cos;
-
-        Rows = n;
-        Cols = n;
-        Determinant = null;
-        Values = rot;
+        Values[p, q] = sin;
+        Values[q, p] = -sin;
+        Values[p, p] = cos;
+        Values[q, q] = cos;
 
     }
+
+    #region Get
+    public override Complex GetValue(int row, int col)
+    {
+        if (row > Rows || row < 1 || col > Cols || col < 1) throw new IndexOutOfRangeException();
+        return Values[row - 1, col - 1];
+    }
+    public override Complex GetDeterminant()
+    {
+        CalculateDeterminant();
+        return Determinant is not null ? Determinant : new(double.NaN);
+    }
+    #endregion
 
     #region Transformation
     /// <summary>
@@ -223,13 +216,13 @@ public class NMatrix : Matrix<Number>
     ///     deleting i.row and/or j.column from A
     /// </code>
     /// </summary>
-    public override NMatrix SubMatrix(int i, int k)
+    public override CMatrix SubMatrix(int i, int k)
     {
 
         if (i > 0 && k > 0)
         {
 
-            Number[,] sub = new Number[Rows - 1, Cols - 1];
+            Complex[,] sub = new Complex[Rows - 1, Cols - 1];
 
             int subrow = 0;
             int subcol = 0;
@@ -253,7 +246,7 @@ public class NMatrix : Matrix<Number>
         else if (i > 0 && k < 0)
         {
 
-            Number[,] sub = new Number[Rows - 1, Cols];
+            Complex[,] sub = new Complex[Rows - 1, Cols];
 
             int subrow = 0;
             i--;
@@ -274,7 +267,7 @@ public class NMatrix : Matrix<Number>
         else if (i < 0 && k > 0)
         {
 
-            Number[,] sub = new Number[Rows, Cols - 1];
+            Complex[,] sub = new Complex[Rows, Cols - 1];
 
             int subcol = 0;
             k--;
@@ -299,10 +292,10 @@ public class NMatrix : Matrix<Number>
     ///     B.Element(i,j) = A.Element(j,i)
     /// </code>
     /// </summary>
-    public override NMatrix Transpose()
+    public override CMatrix Transpose()
     {
 
-        Number[,] transpose = new Number[Cols, Rows];
+        Complex[,] transpose = new Complex[Cols, Rows];
 
         for (int row = 0; row < Rows; row++)
             for (int col = 0; col < Cols; col++)
@@ -318,22 +311,24 @@ public class NMatrix : Matrix<Number>
     ///     B.Element(i,j) = +-|SubMatrix(i,j)| / |A|
     /// </code>
     /// </summary>
-    public override NMatrix Inverse()
+    public override CMatrix Inverse()
     {
 
         if (!IsRegular()) throw new Exception("cannot calculate inverse of non regular matrix.");
         if (!IsQuadratic()) throw new Exception("cannot calculate inverse of non quadratic matrix.");
 
-        var determinant = CalculateDeterminant();
+        CalculateDeterminant();
+        if (Determinant is null) throw new Exception("failed to calculate determinant");
+        Complex determinant = Determinant;
 
-        Number[,] inverse = new Number[Rows, Cols];
+        Complex[,] inverse = new Complex[Rows, Cols];
 
         for (int row = 1; row <= Rows; row++)
         {
             for (int col = 1; col <= Cols; col++)
             {
-                Number subdeterminant = SubMatrix(row, col).GetDeterminant();
-                Number adjunct = (row + col) % 2 == 0 ? subdeterminant : -subdeterminant;
+                Complex subdeterminant = SubMatrix(row, col).GetDeterminant();
+                Complex adjunct = (row + col) % 2 == 0 ? subdeterminant : -subdeterminant;
                 inverse[row - 1, col - 1] = adjunct / determinant;
             }
         }
@@ -341,20 +336,48 @@ public class NMatrix : Matrix<Number>
         return new(inverse);
 
     }
+    /// <summary>
+    /// <code>
+    /// Conjugate: Matrix B
+    ///     B.Element(i,j) = A.Element(i,j).Conjugate()
+    /// </code>
+    /// </summary>
+    public override CMatrix Conjugate()
+    {
+
+        Complex[,] conjugate = new Complex[Rows, Cols];
+
+        for (int row = 0; row < Rows; row++)
+            for (int col = 0; col < Cols; col++)
+                conjugate[row, col] = Values[row, col].Conjugate();
+
+        return new(conjugate);
+
+    }
+    /// <summary>
+    /// <code>
+    /// ConjugateTranspose: Matrix B
+    ///     B = A.Conjugate().Transpose()
+    /// </code>
+    /// </summary>
+    public override CMatrix ConjugateTranspose()
+        => Conjugate().Transpose();
     #endregion
 
     #region Properties
+    public override bool IsQuadratic()
+        => Rows == Cols;
     /// <summary>
     /// <code>
     /// Trace: Sum(Diagonals(A))
     /// </code>
     /// </summary>
-    public override Number Trace()
+    public override Complex Trace()
     {
 
         if (!IsQuadratic()) throw new Exception("cannot calculate trace of non quadratic matrix.");
 
-        Number trace = new();
+        Complex trace = new();
 
         for (int row = 0; row < Rows; row++)
             trace += Values[row, row];
@@ -382,7 +405,28 @@ public class NMatrix : Matrix<Number>
     /// </code>
     /// </summary>
     public override bool IsOrthogonal()
-        => IsQuadratic() && this * this.Transpose() == new NMatrix(SpecialQuadratic.Identity, this.Rows);
+        => IsQuadratic() && this * this.Transpose() == new CMatrix(SpecialQuadratic.Identity, this.Rows);
+    /// <summary>
+    /// <code>
+    /// IsHermitic: IsQuadratic AND A = ConjugateTranpose(A) ?
+    /// </code>
+    /// </summary>
+    public override bool IsHermitic()
+        => IsQuadratic() && this == this.ConjugateTranspose();
+    /// <summary>
+    /// <code>
+    /// IsSkewHermitic: IsQuadratic AND A = -ConjugateTranspose(A) ?
+    /// </code>
+    /// </summary>
+    public override bool IsSkewHermitic()
+        => IsQuadratic() && this == -this.ConjugateTranspose();
+    /// <summary>
+    /// <code>
+    /// IsUnitary: IsQuadratic AND A * ConjugateTranpose(A) = Identity ?
+    /// </code>
+    /// </summary>
+    public override bool IsUnitary()
+        => IsQuadratic() && this * this.ConjugateTranspose() == new CMatrix(SpecialQuadratic.Identity, this.Rows);
     /// <summary>
     /// <code>
     /// IsRegular: IsQuadratic AND |A| is not 0 ?
@@ -393,18 +437,16 @@ public class NMatrix : Matrix<Number>
 
         if (IsQuadratic())
         {
-            var det = CalculateDeterminant();
-            return det != Number.Zero;
+            CalculateDeterminant();
+            return Determinant is not null && Determinant != Complex.Zero;
         }
         else return false;
 
     }
-    protected override Number CalculateDeterminant()
+    protected override void CalculateDeterminant()
     {
 
-        return Determinant is null ?
-            new NDeterminant(this).Value :
-            Determinant.Value;
+        Determinant ??= new CDeterminant(this).Value;
 
     }
     /// <summary>
@@ -416,11 +458,11 @@ public class NMatrix : Matrix<Number>
         => IsRegular() ?
             Rows :
             RankRecursion(this);
-    private static int RankRecursion(NMatrix m)
+    private static int RankRecursion(CMatrix m)
     {
 
-        int r = m.GetRows();
-        int c = m.GetCols();
+        int r = m.Rows;
+        int c = m.Cols;
 
         if (r == c)
         {
@@ -430,14 +472,14 @@ public class NMatrix : Matrix<Number>
 
             else if (r == 2)
 
-                return m.GetValue(1, 1) != Number.Zero || m.GetValue(1, 2) != Number.Zero || m.GetValue(2, 1) != Number.Zero || m.GetValue(2, 2) != Number.Zero ?
+                return m.GetValue(1, 1) != Complex.Zero || m.GetValue(1, 2) != Complex.Zero || m.GetValue(2, 1) != Complex.Zero || m.GetValue(2, 2) != Complex.Zero ?
                     1 :
                     0;
 
             else
             {
 
-                List<NMatrix> mlist = new();
+                List<CMatrix> mlist = new();
 
                 for (int i = 1; i <= r; i++)
                     for (int k = 1; k <= c; k++)
@@ -455,7 +497,7 @@ public class NMatrix : Matrix<Number>
         else if (r > c)
         {
 
-            List<NMatrix> mlist = new();
+            List<CMatrix> mlist = new();
 
             for (int i = 1; i <= r; i++)
                 mlist.Add(m.SubMatrix(i, -1));
@@ -470,7 +512,7 @@ public class NMatrix : Matrix<Number>
         else
         {
 
-            List<NMatrix> mlist = new();
+            List<CMatrix> mlist = new();
 
             for (int i = 1; i < c; i++)
                 mlist.Add(m.SubMatrix(-1, i));
@@ -486,11 +528,11 @@ public class NMatrix : Matrix<Number>
     #endregion
 
     #region Operations
-    public static NMatrix operator +(NMatrix A) => A;
-    public static NMatrix operator -(NMatrix A)
+    public static CMatrix operator +(CMatrix A) => A;
+    public static CMatrix operator -(CMatrix A)
     {
 
-        Number[,] negativ = new Number[A.Rows, A.Cols];
+        Complex[,] negativ = new Complex[A.Rows, A.Cols];
 
         for (int row = 0; row < A.Rows; row++)
             for (int col = 0; col < A.Cols; col++)
@@ -499,12 +541,12 @@ public class NMatrix : Matrix<Number>
         return new(negativ);
 
     }
-    public static NMatrix operator +(NMatrix A, NMatrix B)
+    public static CMatrix operator +(CMatrix A, CMatrix B)
     {
 
         if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception("cannot add two matrices of different type.");
 
-        Number[,] sum = new Number[A.Rows, A.Cols];
+        Complex[,] sum = new Complex[A.Rows, A.Cols];
 
         for (int row = 0; row < A.Rows; row++)
             for (int col = 0; col < A.Cols; col++)
@@ -512,12 +554,12 @@ public class NMatrix : Matrix<Number>
         return new(sum);
 
     }
-    public static NMatrix operator -(NMatrix A, NMatrix B)
+    public static CMatrix operator -(CMatrix A, CMatrix B)
     {
 
         if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception("cannot subtract two matrices of different type.");
 
-        Number[,] diff = new Number[A.Rows, A.Cols];
+        Complex[,] diff = new Complex[A.Rows, A.Cols];
 
         for (int row = 0; row < A.Rows; row++)
             for (int col = 0; col < A.Cols; col++)
@@ -526,10 +568,10 @@ public class NMatrix : Matrix<Number>
         return new(diff);
 
     }
-    public static NMatrix operator *(Number A, NMatrix B)
+    public static CMatrix operator *(double A, CMatrix B)
     {
 
-        Number[,] mult = new Number[B.Rows, B.Cols];
+        Complex[,] mult = new Complex[B.Rows, B.Cols];
 
         for (int row = 0; row < B.Rows; row++)
             for (int col = 0; col < B.Cols; col++)
@@ -538,19 +580,31 @@ public class NMatrix : Matrix<Number>
         return new(mult);
 
     }
-    public static NMatrix operator *(NMatrix A, NMatrix B)
+    public static CMatrix operator *(Complex A, CMatrix B)
+    {
+
+        Complex[,] mult = new Complex[B.Rows, B.Cols];
+
+        for (int row = 0; row < B.Rows; row++)
+            for (int col = 0; col < B.Cols; col++)
+                mult[row, col] = A * B.Values[row, col];
+
+        return new(mult);
+
+    }
+    public static CMatrix operator *(CMatrix A, CMatrix B)
     {
 
         if (A.Cols != B.Rows) throw new Exception("cannot multiply two matrices of that type.");
 
         int n = A.Cols;
-        Number[,] product = new Number[A.Rows, B.Cols];
+        Complex[,] product = new Complex[A.Rows, B.Cols];
 
         for (int row = 0; row < A.Rows; row++)
         {
             for (int col = 0; col < B.Cols; col++)
             {
-                Number rowsum = new(0);
+                Complex rowsum = new();
                 for (int i = 0; i < n; i++)
                     rowsum += A.Values[row, i] * B.Values[i, col];
                 product[row, col] = rowsum;
@@ -560,7 +614,7 @@ public class NMatrix : Matrix<Number>
         return new(product);
 
     }
-    public static bool operator ==(NMatrix A, NMatrix B)
+    public static bool operator ==(CMatrix A, CMatrix B)
     {
 
         if (A.Rows != B.Rows || A.Cols != B.Cols) return false;
@@ -573,12 +627,12 @@ public class NMatrix : Matrix<Number>
         return true;
 
     }
-    public static bool operator !=(NMatrix A, NMatrix B) => !(A == B);
+    public static bool operator !=(CMatrix A, CMatrix B) => !(A == B);
     #endregion
 
     #region ObjectOverrides
     public override string ToString()
-        => $"DMatrix [{Rows}|{Cols}]";
+        => $"CMatrix [{Rows}|{Cols}]";
     public override int GetHashCode()
     {
         int sum = 0;
@@ -587,6 +641,6 @@ public class NMatrix : Matrix<Number>
         return sum;
     }
     public override bool Equals(object? obj)
-        => obj is not null && obj is NMatrix && this == (NMatrix)obj;
+        => obj is not null && obj is CMatrix && this == (CMatrix)obj;
     #endregion
 }

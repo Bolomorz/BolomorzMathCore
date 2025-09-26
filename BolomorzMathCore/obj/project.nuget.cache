@@ -1,11 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "w+JC7Y07hG0=",
+  "dgSpecHash": "KIm8Ul4nrhU=",
   "success": true,
   "projectFilePath": "/mnt/5581091c-1180-4d63-aa70-7acec0a858a2/Repositories/BolomorzMathCore/BolomorzMathCore/BolomorzMathCore.csproj",
-  "expectedPackageFiles": [
-    "/home/bolomorz/.nuget/packages/microsoft.netcore.app.ref/8.0.20/microsoft.netcore.app.ref.8.0.20.nupkg.sha512",
-    "/home/bolomorz/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.20/microsoft.aspnetcore.app.ref.8.0.20.nupkg.sha512"
-  ],
+  "expectedPackageFiles": [],
   "logs": []
 }
