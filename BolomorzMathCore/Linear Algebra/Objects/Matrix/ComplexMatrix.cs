@@ -1,5 +1,5 @@
 using BolomorzMathCore.Basics;
-using BolomorzMathCore.LinearAlgebra.Generics;
+using BolomorzMathCore.LinearAlgebra.Base;
 
 namespace BolomorzMathCore.LinearAlgebra.Matrix;
 
@@ -200,7 +200,7 @@ public class CMatrix : MatrixBase<Complex>
     public override Complex GetValue(int row, int col)
     {
         if (row > Rows || row < 1 || col > Cols || col < 1) throw new IndexOutOfRangeException();
-        return Values[row - 1, col - 1];
+        return new(Values[row - 1, col - 1]);
     }
     public override Complex GetDeterminant()
     {
@@ -613,6 +613,26 @@ public class CMatrix : MatrixBase<Complex>
 
         return new(product);
 
+    }
+    public static CMatrix operator *(NMatrix A, CMatrix B)
+    {
+        if (A.Cols != B.Rows) throw new Exception("cannot multiply two matrices of that type.");
+
+        int n = A.Cols;
+        Complex[,] product = new Complex[A.Rows, B.Cols];
+
+        for (int row = 0; row < A.Rows; row++)
+        {
+            for (int col = 0; col < B.Cols; col++)
+            {
+                Complex rowsum = new();
+                for (int i = 0; i < n; i++)
+                    rowsum += A.Values[row, i] * B.Values[i, col];
+                product[row, col] = rowsum;
+            }
+        }
+
+        return new(product);
     }
     public static bool operator ==(CMatrix A, CMatrix B)
     {

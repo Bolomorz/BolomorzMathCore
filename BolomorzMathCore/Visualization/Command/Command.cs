@@ -1,3 +1,5 @@
+using BolomorzMathCore.Visualization.Base;
+
 namespace BolomorzMathCore.Visualization.Command;
 
 public class CommandResult

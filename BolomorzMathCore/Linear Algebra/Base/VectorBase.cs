@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.LinearAlgebra.Generics;
+namespace BolomorzMathCore.LinearAlgebra.Base;
 
 
 public abstract class VectorBase<T>(int n, T[] values) where T : class

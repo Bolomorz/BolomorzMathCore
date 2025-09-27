@@ -1,27 +1,42 @@
 using BolomorzMathCore.Basics;
+using BolomorzMathCore.LinearAlgebra.Matrix;
 
-namespace BolomorzMathCore.Matrices.Algorithms;
+namespace BolomorzMathCore.LinearAlgebra.Algorithms;
 
-public class HessenbergTransform
+public class HessenbergTransform : AlgorithmBase<Complex, CMatrix>
 {
-
-    protected CMatrix Matrix { get; set; }
-
-    public HessenbergTransform(CMatrix matrix)
+    public HessenbergTransform(CMatrix matrix) : base(new(1, 1), new(SpecialQuadratic.Zero, 0))
     {
         if (!matrix.IsQuadratic()) throw new Exception("cannot calculate HessenbergTransform of non quadratic matrix.");
-        Matrix = CalculateHessenbergTransform(matrix);
-    }
-
-    private static CMatrix CalculateHessenbergTransform(CMatrix m)
-    {
-
-        int n = m.GetRows();
+        int n = matrix.Rows;
         Complex[,] hbtransform = new Complex[n, n];
-
+        Complex[,] m = new Complex[n, n];
         for (int i = 1; i <= n; i++)
             for (int j = 1; j <= n; j++)
-                hbtransform[i - 1, j - 1] = m.GetValue(i, j);
+            {
+                hbtransform[i - 1, j - 1] = new(matrix.GetValue(i, j));
+                m[i - 1, j - 1] = matrix.GetValue(i, j);
+            }
+        Result = CalculateHessenbergTransform(hbtransform, n, m);
+    }
+
+    public HessenbergTransform(NMatrix matrix) : base(new(1), new(SpecialQuadratic.Zero, 0))
+    {
+        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate HessenbergTransform of non quadratic matrix.");
+        int n = matrix.Rows;
+        Complex[,] hbtransform = new Complex[n, n];
+        Complex[,] m = new Complex[n, n];
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++)
+            {
+                hbtransform[i - 1, j - 1] = new(matrix.GetValue(i, j));
+                m[i - 1, j - 1] = matrix.GetValue(i, j);
+            }
+        Result = CalculateHessenbergTransform(hbtransform, n, m);
+    }
+
+    private static CMatrix CalculateHessenbergTransform(Complex[,] hbtransform, int n, Complex[,] m)
+    {
 
         for (int j = 1; j <= n - 2; j++)
         {
@@ -37,7 +52,7 @@ public class HessenbergTransform
                     Complex w, c, s;
                     if (aj1j.Absolute() < double.Epsilon * aij.Absolute())
                     {
-                        w = -m.GetValue(i, j);
+                        w = new(-m[i-1, j-1]);
                         c = new();
                         s = new(1);
                     }
@@ -73,7 +88,5 @@ public class HessenbergTransform
         return new(hbtransform);
 
     }
-
-    public CMatrix GetResult() => Matrix;
 
 }

@@ -1,5 +1,5 @@
 using BolomorzMathCore.Basics;
-using BolomorzMathCore.LinearAlgebra.Generics;
+using BolomorzMathCore.LinearAlgebra.Base;
 
 namespace BolomorzMathCore.LinearAlgebra.Matrix;
 

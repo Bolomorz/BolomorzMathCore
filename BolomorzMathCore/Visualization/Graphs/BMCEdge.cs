@@ -1,45 +1,44 @@
 using BolomorzMathCore.Graphs;
-using BolomorzMathCore.Visualization.Structs;
+using BolomorzMathCore.Visualization.Base;
 
 namespace BolomorzMathCore.Visualization.GraphVisualization;
 
-public class BMCEdge : IBMCElement
+public class BMCEdge : BMCElementBase<Edge>
 {
-    private Edge Edge;
-    private BMCCollection Collection;
     private BMCGraph Graph;
 
-    internal BMCEdge(Edge edge, BMCGraph graph)
+    internal BMCEdge(Edge edge, BMCGraph graph) : base(edge)
     {
-        Edge = edge;
         Graph = graph;
-        Collection = new();
     }
 
-    #region Interface
-    public bool Equals(IBMCElement? element)
+    public override bool Equals(BMCElementBase<Edge>? other)
     {
-        return false;
+        throw new NotImplementedException();
     }
-    public void SetAttributes(Dictionary<string, object> attributes)
-    {
 
-    }
-    public bool IsPointInGeometry(BMCPoint point)
+    public override BMCCollection GetBMCCollection()
     {
-        return false;
+        throw new NotImplementedException();
     }
-    public bool QueryBy(Dictionary<string, object> query)
+
+    public override bool IsPointInGeometry(BMCPoint point)
     {
-        return false;
+        throw new NotImplementedException();
     }
-    public BMCCollection GetBMCCollection()
+
+    public override bool QueryBy(Dictionary<string, object> query)
     {
-        return Collection;
+        throw new NotImplementedException();
     }
-    public void Remove()
+
+    public override void Remove()
     {
-        
+        throw new NotImplementedException();
     }
-    #endregion
+
+    public override void SetAttributes(Dictionary<string, object> attributes)
+    {
+        throw new NotImplementedException();
+    }
 }

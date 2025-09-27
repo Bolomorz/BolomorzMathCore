@@ -1,3 +1,5 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Charting.Algorithms;
 
 /// <summary>
@@ -31,34 +33,32 @@ namespace BolomorzMathCore.Charting.Algorithms;
 /// </code>
 /// </summary>
 /// <see cref="Function"/> 
-public class Regression(List<SeriesPoint> points)
+public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoint>, Function>(points, Function.NaF())
 {
-    protected List<SeriesPoint> points { get; set; } = points;
-
-    public Function PolynomialRegression(int order)
+    public void PolynomialRegression(int order)
     {
-        var reg = RegressionAlgorithms.PolynomialRegression(order, points);
-        return reg is not null ? Function.Polynomial(reg) : Function.NaF();
+        var reg = RegressionAlgorithms.PolynomialRegression(order, Input);
+        Result = reg is not null ? Function.Polynomial(reg) : Function.NaF();
     }
-    public Function LinearRegression()
+    public void LinearRegression()
     {
-        var reg = RegressionAlgorithms.LinearRegression(points);
-        return reg is not null ? Function.Line(reg[0], reg[1]) : Function.NaF();
+        var reg = RegressionAlgorithms.LinearRegression(Input);
+        Result = reg is not null ? Function.Line(reg[0], reg[1]) : Function.NaF();
     }
-    public Function PowerRegression()
+    public void PowerRegression()
     {
-        var reg = RegressionAlgorithms.PowerRegression(points);
-        return reg is not null ? Function.Power(reg[0], reg[1]) : Function.NaF();
+        var reg = RegressionAlgorithms.PowerRegression(Input);
+        Result = reg is not null ? Function.Power(reg[0], reg[1]) : Function.NaF();
     }
-    public Function LogarithmicRegression()
+    public void LogarithmicRegression()
     {
-        var reg = RegressionAlgorithms.LogarithmicRegression(points);
-        return reg is not null ? Function.Logarithm(reg[0], reg[1]) : Function.NaF();
+        var reg = RegressionAlgorithms.LogarithmicRegression(Input);
+        Result = reg is not null ? Function.Logarithm(reg[0], reg[1]) : Function.NaF();
     }
-    public Function ExponentialRegression()
+    public void ExponentialRegression()
     {
-        var reg = RegressionAlgorithms.ExponentialRegression(points);
-        return reg is not null ? Function.Exponential(reg[0], reg[1]) : Function.NaF();
+        var reg = RegressionAlgorithms.ExponentialRegression(Input);
+        Result = reg is not null ? Function.Exponential(reg[0], reg[1]) : Function.NaF();
     }
 }
 

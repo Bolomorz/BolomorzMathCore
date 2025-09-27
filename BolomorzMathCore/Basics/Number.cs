@@ -11,7 +11,10 @@ public class Number
     {
         Re = re;
     }
-
+    public Number(Number number)
+    {
+        Re = number.Re;
+    }
     public Number()
     {
         Re = 0;
@@ -23,8 +26,10 @@ public class Number
         => new(Math.Sqrt(Square().Re));
     public Number Sign()
         => new(Re / Absolute().Re);
-    public Number SquareRoot()
-        => new(Math.Sqrt(Re));
+    public Complex SquareRoot()
+        => Re < 0 ?
+                new(0, Math.Sqrt(-Re)) :
+                new(Math.Sqrt(Re));
 
     #region Operator
     public static Number operator +(Number A)
@@ -83,6 +88,12 @@ public class Number
         => A.Re > B.Re;
     public static bool operator <(Number A, Number B)
         => A.Re < B.Re;
+
+    public static implicit operator Complex(Number A)
+    {
+        Complex B = new(A.Re);
+        return B;
+    }
     #endregion
 
     #region ObjectOverrides

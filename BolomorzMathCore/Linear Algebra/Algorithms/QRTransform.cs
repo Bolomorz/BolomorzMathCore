@@ -1,16 +1,13 @@
+using BolomorzMathCore.Basics;
+using BolomorzMathCore.LinearAlgebra.Algorithms;
+
 namespace BolomorzMathCore.Matrices.Algorithms;
 
-public class QRTransform
+public class QRTransform : AlgorithmBase<HessenbergTransform, Number>
 {
-    
-    protected CMatrix Matrix { get; set; }
-
-    internal QRTransform(HessenbergTransform hessenberg)
+    internal QRTransform(HessenbergTransform hessenberg) : base(hessenberg, new())
     {
-        CMatrix hbt = hessenberg.GetResult();
         throw new NotImplementedException();
     }
-
-    public CMatrix GetResult() => Matrix; 
 
 }

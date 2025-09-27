@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.LinearAlgebra.Generics;
+namespace BolomorzMathCore.LinearAlgebra.Base;
 
 public abstract class MatrixBase<T>(int rows, int cols, T[,] values) where T : class
 {

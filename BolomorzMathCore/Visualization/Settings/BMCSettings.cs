@@ -23,7 +23,7 @@ public class BMCSettings
     public Color InactiveColor { get; set; } = Color.Black;
     #endregion
 
-    #region Matrices
+    #region Linear Algebra
     public int Precision { get; set; } = 2;
     #endregion
 }

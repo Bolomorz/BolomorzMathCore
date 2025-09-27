@@ -1,8 +1,8 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Matrices.Algorithms;
+namespace BolomorzMathCore.LinearAlgebra.Algorithms;
 
-public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
+public class BairstowAlgorithm : AlgorithmBase<CharacteristicPolynomial, Complex[]>
 {
 
     private class QuadraticRoots
@@ -19,7 +19,10 @@ public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
 
     private const int ITERMAX = 1000;
 
-    protected Complex[] EigenValues { get; set; } = [.. Bairstow(polynomial.GetResult())];
+    public BairstowAlgorithm(CharacteristicPolynomial polynomial) : base(polynomial, [])
+    {
+        Result = [.. Bairstow(Input.GetResult() ?? [])];
+    }
 
     private static List<Complex> Bairstow(Complex[] A)
     {
@@ -106,7 +109,5 @@ public class BairstowAlgorithm(CharacteristicPolynomial polynomial)
         };
 
     }
-
-    public Complex[] GetResult() => EigenValues;
 
 }

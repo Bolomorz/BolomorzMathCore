@@ -1,11 +1,5 @@
 namespace BolomorzMathCore.Graphs.Algorithms;
 
-public interface IGraphAlgorithm<T>
-{
-    List<AlgorithmElement<T>> GetResult();
-    AlgorithmElement<T>? GetResult(Vertex endvertex);
-}
-
 public class AlgorithmElement<T>(T result)
 {
     public T Result { get; private set; } = result;

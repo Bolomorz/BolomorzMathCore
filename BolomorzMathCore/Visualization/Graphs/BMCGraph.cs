@@ -1,6 +1,6 @@
 using BolomorzMathCore.Graphs;
 using BolomorzMathCore.Visualization.Command;
-using BolomorzMathCore.Visualization.Structs;
+using BolomorzMathCore.Visualization.Base;
 
 namespace BolomorzMathCore.Visualization.GraphVisualization;
 
@@ -10,7 +10,7 @@ public class BMCGraph(Graph graph, BMCSettings settings, BMCCanvas canvas)
     protected BMCCanvas Canvas { get; set; } = canvas;
     protected List<BMCVertex> Vertices { get; set; } = [];
     protected List<BMCEdge> Edges { get; set; } = [];
-    protected List<BMCText> Texts { get; set; } = [];
+    protected List<Geometry.BMCText> Texts { get; set; } = [];
     protected IBMCElement? ActiveElement { get; set; } = null;
     protected BMCSettings Settings { get; set; } = settings;
 
@@ -44,6 +44,10 @@ public class BMCGraph(Graph graph, BMCSettings settings, BMCCanvas canvas)
     public void CreateEdge()
     {
 
+    }
+    public void CreateText()
+    {
+        
     }
     public CommandResult Command(Command<GraphCommand> command)
     {

@@ -1,40 +1,35 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Graphs.Algorithms;
 
-public class Dijkstra : IGraphAlgorithm<ShortestPath>
+public class Dijkstra : AlgorithmBase<Graph, List<AlgorithmElement<ShortestPath>>>
 {
-    private List<AlgorithmElement<ShortestPath>> Elements;
     private List<Vertex> Q;
-    private Graph Graph;
     private Vertex StartVertex;
 
-    public Dijkstra(Graph graph, Vertex startvertex)
+    public Dijkstra(Graph graph, Vertex startvertex) : base(graph, [])
     {
 
-        if (graph.GraphType != GraphType.Directed || graph.GraphWeighting != GraphWeighting.Weighted)
+        if (Input.GraphType != GraphType.Directed || Input.GraphWeighting != GraphWeighting.Weighted)
             throw new Exception("Can only use Dijkstra on Weighted Directed Graph");
 
-        Graph = graph;
-        Q = new();
-        Elements = new();
+        Q = [];
         StartVertex = startvertex;
 
         Init();
         DijkstraCalculation();
 
-        foreach (var ae in Elements)
+        foreach (var ae in Result)
             ae.Result._Path = ShortestPath(ae.Result._Vertex);
         
     }
 
-    public List<AlgorithmElement<ShortestPath>> GetResult()
-        => Elements;
-
     public AlgorithmElement<ShortestPath>? GetResult(Vertex endvertex)
     {
 
-        for (int i = 0; i < Elements.Count; i++)
-            if (Elements[i].Result._Vertex == endvertex)
-                return Elements[i];
+        for (int i = 0; i < Result.Count; i++)
+            if (Result[i].Result._Vertex == endvertex)
+                return Result[i];
 
         return null;
 
@@ -43,14 +38,14 @@ public class Dijkstra : IGraphAlgorithm<ShortestPath>
     private void Init()
     {
 
-        foreach (var vertex in Graph.GetVertices())
+        foreach (var vertex in Input.GetVertices())
         {
 
             var ae = new AlgorithmElement<ShortestPath>(Algorithms.ShortestPath.DijkstraElement(vertex));
 
             if (vertex == StartVertex)
                 ae.Result._Distance = 0;
-            Elements.Add(ae);
+            Result.Add(ae);
             Q.Add(vertex);
 
         }
@@ -83,7 +78,7 @@ public class Dijkstra : IGraphAlgorithm<ShortestPath>
         for (int i = 0; i < Q.Count; i++)
         {
             var u = Q[i];
-            var ae = Elements.First(e => e.Result._Vertex == u);
+            var ae = Result.First(e => e.Result._Vertex == u);
             if (ae is not null && ae.Result._Distance < dist)
             {
                 index = i;
@@ -105,8 +100,8 @@ public class Dijkstra : IGraphAlgorithm<ShortestPath>
     private void DistanceUpdate(Vertex u, Vertex v)
     {
 
-        var aeu = Elements.First(e => e.Result._Vertex == u);
-        var aev = Elements.First(e => e.Result._Vertex == v);
+        var aeu = Result.First(e => e.Result._Vertex == u);
+        var aev = Result.First(e => e.Result._Vertex == v);
 
         if (aeu is not null && aev is not null)
         {
@@ -122,7 +117,7 @@ public class Dijkstra : IGraphAlgorithm<ShortestPath>
     private double? WeightingOfEdge(Vertex u, Vertex v)
     {
 
-        foreach (var edge in Graph.GetEdges())
+        foreach (var edge in Input.GetEdges())
             if (edge.Vertex1 == u && edge.Vertex2 == v)
                 return edge.Weight;
 
@@ -135,7 +130,7 @@ public class Dijkstra : IGraphAlgorithm<ShortestPath>
         List<Vertex> path = [v];
 
         var u = v;
-        var ae = Elements.First(e => e.Result._Vertex == v);
+        var ae = Result.First(e => e.Result._Vertex == v);
 
         while (ae is not null)
         {
@@ -144,7 +139,7 @@ public class Dijkstra : IGraphAlgorithm<ShortestPath>
             {
                 u = ae.Result._Predecessor;
                 path.Insert(0, u);
-                ae = Elements.First(e => e.Result._Vertex == u);
+                ae = Result.First(e => e.Result._Vertex == u);
             }
         }
 

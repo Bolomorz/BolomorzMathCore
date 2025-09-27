@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.LinearAlgebra.Generics;
+namespace BolomorzMathCore.LinearAlgebra.Base;
 
 public abstract class DeterminantBase<T , U> where T : class where U : MatrixBase<T>
 {
