@@ -3,7 +3,7 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Visualization.Geometry;
 
-public class BMCArc : BMCGeometryBase
+public class BMCArc() : BMCGeometryBase(GeometryType.Arc)
 {
     public required BMCPoint Center { get; set; }
     public required Number StartAngle { get; set; }

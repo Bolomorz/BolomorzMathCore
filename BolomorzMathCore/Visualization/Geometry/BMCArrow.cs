@@ -3,7 +3,7 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Visualization.Geometry;
 
-public class BMCArrow : BMCGeometryBase
+public class BMCArrow() : BMCGeometryBase(GeometryType.Arrow)
 {
     public required BMCPoint Tip { get; set; }
     public required BMCPoint Left { get; set; }

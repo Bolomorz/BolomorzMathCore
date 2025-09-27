@@ -3,7 +3,7 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Visualization.Geometry;
 
-public class BMCPolygon : BMCGeometryBase
+public class BMCPolygon() : BMCGeometryBase(GeometryType.Polygon)
 {
     public required BMCPoint[] Points { get; set; }
 

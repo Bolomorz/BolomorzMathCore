@@ -3,7 +3,7 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Visualization.Geometry;
 
-public class BMCText : BMCGeometryBase
+public class BMCText() : BMCGeometryBase(GeometryType.Text)
 {
     public required BMCPoint Position { get; set; }
     public required string Content { get; set; }

@@ -1,6 +1,6 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Graphs.Algorithms;
+namespace BolomorzMathCore.GraphTheory.Algorithms;
 
 public class BellmanFord : AlgorithmBase<Graph, List<AlgorithmElement<ShortestPath>>>
 {

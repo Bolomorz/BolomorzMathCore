@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Charting;
+namespace BolomorzMathCore.Analysis;
 
 /// <summary>
 /// <code>
@@ -12,7 +12,7 @@ namespace BolomorzMathCore.Charting;
 /// - XAxis: Axis | x-axis of C
 /// </code>
 /// </summary>
-/// <see cref="Charting.Series"/> 
+/// <see cref="Analysis.Series"/> 
 /// <see cref="Axis"/> 
 public class Chart
 {

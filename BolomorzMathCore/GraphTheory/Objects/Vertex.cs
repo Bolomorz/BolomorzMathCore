@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Graphs;
+namespace BolomorzMathCore.GraphTheory;
 
 /// <summary>
 /// <code>
@@ -16,7 +16,7 @@ namespace BolomorzMathCore.Graphs;
 /// </code>
 /// </summary>
 /// <see cref="Edge"/>
-/// <see cref="Graphs.Graph"/> 
+/// <see cref="GraphTheory.Graph"/> 
 public class Vertex
 {
     public int VID { get; private set; }

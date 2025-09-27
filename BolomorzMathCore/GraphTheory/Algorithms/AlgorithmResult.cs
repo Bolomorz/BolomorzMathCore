@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Graphs.Algorithms;
+namespace BolomorzMathCore.GraphTheory.Algorithms;
 
 public class AlgorithmElement<T>(T result)
 {

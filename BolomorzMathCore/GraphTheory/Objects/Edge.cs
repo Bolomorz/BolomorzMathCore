@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Graphs;
+namespace BolomorzMathCore.GraphTheory;
 
 /// <summary>
 /// <code>
@@ -21,7 +21,7 @@ namespace BolomorzMathCore.Graphs;
 /// </code>
 /// </summary>
 /// <see cref="Vertex"/>
-/// <see cref="Graphs.Graph"/>  
+/// <see cref="GraphTheory.Graph"/>  
 /// <see cref="GraphType"/> 
 /// <see cref="GraphWeighting"/> 
 public class Edge

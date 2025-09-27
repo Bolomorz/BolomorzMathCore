@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Graphs;
+namespace BolomorzMathCore.GraphTheory;
 
 /// <summary>
 /// <code>

@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Graphs;
+namespace BolomorzMathCore.GraphTheory;
 
 /// <summary>
 /// <code>
@@ -25,8 +25,8 @@ namespace BolomorzMathCore.Graphs;
 /// </summary>
 /// <see cref="Vertex"/> 
 /// <see cref="Edge"/>
-/// <see cref="Graphs.GraphType"/> 
-/// <see cref="Graphs.GraphWeighting"/> 
+/// <see cref="GraphTheory.GraphType"/> 
+/// <see cref="GraphTheory.GraphWeighting"/> 
 public class Graph(GraphType type, GraphWeighting weighting)
 {
     private List<Vertex> Vertices { get; set; } = [];

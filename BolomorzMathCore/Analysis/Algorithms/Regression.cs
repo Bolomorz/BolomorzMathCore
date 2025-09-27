@@ -1,6 +1,6 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Charting.Algorithms;
+namespace BolomorzMathCore.Analysis.Algorithms;
 
 /// <summary>
 /// <code>
@@ -35,30 +35,35 @@ namespace BolomorzMathCore.Charting.Algorithms;
 /// <see cref="Function"/> 
 public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoint>, Function>(points, Function.NaF())
 {
-    public void PolynomialRegression(int order)
+    public Regression PolynomialRegression(int order)
     {
         var reg = RegressionAlgorithms.PolynomialRegression(order, Input);
         Result = reg is not null ? Function.Polynomial(reg) : Function.NaF();
+        return this;
     }
-    public void LinearRegression()
+    public Regression LinearRegression()
     {
         var reg = RegressionAlgorithms.LinearRegression(Input);
         Result = reg is not null ? Function.Line(reg[0], reg[1]) : Function.NaF();
+        return this;
     }
-    public void PowerRegression()
+    public Regression PowerRegression()
     {
         var reg = RegressionAlgorithms.PowerRegression(Input);
         Result = reg is not null ? Function.Power(reg[0], reg[1]) : Function.NaF();
+        return this;
     }
-    public void LogarithmicRegression()
+    public Regression LogarithmicRegression()
     {
         var reg = RegressionAlgorithms.LogarithmicRegression(Input);
         Result = reg is not null ? Function.Logarithm(reg[0], reg[1]) : Function.NaF();
+        return this;
     }
-    public void ExponentialRegression()
+    public Regression ExponentialRegression()
     {
         var reg = RegressionAlgorithms.ExponentialRegression(Input);
         Result = reg is not null ? Function.Exponential(reg[0], reg[1]) : Function.NaF();
+        return this;
     }
 }
 

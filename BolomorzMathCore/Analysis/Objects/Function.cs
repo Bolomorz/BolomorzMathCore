@@ -1,4 +1,4 @@
-namespace BolomorzMathCore.Charting;
+namespace BolomorzMathCore.Analysis;
 
 /// <summary>
 /// <code>

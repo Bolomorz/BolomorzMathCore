@@ -3,7 +3,7 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Visualization.Geometry;
 
-public class BMCLine : BMCGeometryBase
+public class BMCLine() : BMCGeometryBase(GeometryType.Line)
 {
     public required BMCPoint StartPosition { get; set; }
     public required BMCPoint EndPosition { get; set; }

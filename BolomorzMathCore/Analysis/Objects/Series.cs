@@ -1,7 +1,7 @@
 using System.Drawing;
-using BolomorzMathCore.Charting.Algorithms;
+using BolomorzMathCore.Analysis.Algorithms;
 
-namespace BolomorzMathCore.Charting;
+namespace BolomorzMathCore.Analysis;
 
 /// <summary>
 /// <code>
@@ -28,9 +28,9 @@ namespace BolomorzMathCore.Charting;
 /// </summary>
 /// <see cref="Chart"/> 
 /// <see cref="SeriesPoint"/> 
-/// <see cref="Charting.Axis"/> 
+/// <see cref="Analysis.Axis"/> 
 /// <see cref="Algorithms.Regression"/> 
-/// <see cref="Charting.Function"/> 
+/// <see cref="Analysis.Function"/> 
 /// <see cref="FunctionType"/> 
 /// <see cref="FunctionStringCollection"/> 
 /// <see cref="FunctionString"/> 
@@ -75,16 +75,16 @@ public class Series(string name, string unit, Color color)
         switch (type)
         {
             case FunctionType.Line:
-                Function = reg.LinearRegression(); break;
+                Function = reg.LinearRegression().GetResult(); break;
             case FunctionType.Polynomial:
-                var preg = reg.PolynomialRegression(order);
+                var preg = reg.PolynomialRegression(order).GetResult();
                 Function = double.IsNaN(preg.GetValues()[0]) ? Function.NaF() : preg; break;
             case FunctionType.Logarithm:
-                Function = reg.LogarithmicRegression(); break;
+                Function = reg.LogarithmicRegression().GetResult(); break;
             case FunctionType.Power:
-                Function = reg.PowerRegression(); break;
+                Function = reg.PowerRegression().GetResult(); break;
             case FunctionType.Exponential:
-                Function = reg.ExponentialRegression(); break;
+                Function = reg.ExponentialRegression().GetResult(); break;
             default:
                 Function = Function.NaF(); break;
         }
