@@ -78,5 +78,5 @@ public class Vertex
         => A?.VID == B?.VID;
 
     public static bool operator !=(Vertex? A, Vertex? B)
-        => A?.VID != B?.VID;
+        => !(A == B);
 }

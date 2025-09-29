@@ -1,14 +1,21 @@
 using BolomorzMathCore.Visualization.Base;
 using BolomorzMathCore.Basics;
+using System.Drawing;
 
 namespace BolomorzMathCore.Visualization.Geometry;
 
-public class BMCText() : BMCGeometryBase(GeometryType.Text)
+public class BMCText(IBMCElement owner) : BMCGeometryBase(GeometryType.Text, owner)
 {
     public required BMCPoint Position { get; set; }
     public required string Content { get; set; }
     public required Number FontSize { get; set; }
     public required Number Rotation { get; set; }
+    public required Color Color { get; set; }
+
+    public override bool IsPointInGeometry(BMCPoint center)
+    {
+        throw new NotImplementedException();
+    }
 
     public override void Reflect(BMCPoint center)
     {

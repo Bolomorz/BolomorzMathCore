@@ -11,5 +11,6 @@ public class CommandResult
 public class Command<T>
 {
     public required T DoCommand { get; set; }
-    public required IBMCElement? Target { get; set; }
+    public IBMCElement? Target { get; set; }
+    public Dictionary<string, object>? Values { get; set; }
 }

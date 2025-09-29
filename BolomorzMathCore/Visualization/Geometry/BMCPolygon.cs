@@ -1,11 +1,18 @@
 using BolomorzMathCore.Visualization.Base;
 using BolomorzMathCore.Basics;
+using System.Drawing;
 
 namespace BolomorzMathCore.Visualization.Geometry;
 
-public class BMCPolygon() : BMCGeometryBase(GeometryType.Polygon)
+public class BMCPolygon(IBMCElement owner) : BMCGeometryBase(GeometryType.Polygon, owner)
 {
     public required BMCPoint[] Points { get; set; }
+    public required Color Color { get; set; }
+
+    public override bool IsPointInGeometry(BMCPoint center)
+    {
+        throw new NotImplementedException();
+    }
 
     public override void Reflect(BMCPoint center)
     {

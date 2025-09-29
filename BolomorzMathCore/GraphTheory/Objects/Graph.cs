@@ -29,7 +29,7 @@ namespace BolomorzMathCore.GraphTheory;
 /// <see cref="GraphTheory.GraphWeighting"/> 
 public class Graph(GraphType type, GraphWeighting weighting)
 {
-    private List<Vertex> Vertices { get; set; } = [];
+    public List<Vertex> Vertices { get; set; } = [];
     /// <summary>
     /// <code>
     /// GetVertices: Vertex[] | vertices of graph
@@ -37,7 +37,7 @@ public class Graph(GraphType type, GraphWeighting weighting)
     /// </summary>
     public List<Vertex> GetVertices() => [.. Vertices];
 
-    private List<Edge> Edges { get; set; } = [];
+    public List<Edge> Edges { get; set; } = [];
     /// <summary>
     /// <code>
     /// GetEdges: Edge[] | edges of graph
@@ -57,9 +57,11 @@ public class Graph(GraphType type, GraphWeighting weighting)
     ///     create vertex with name/description
     /// </code>
     /// </summary>
-    public void CreateVertex(string content)
+    public Vertex CreateVertex(string content)
     {
-        Vertices.Add(new(NextVID++, content, this));
+        var vertex = new Vertex(NextVID++, content, this);
+        Vertices.Add(vertex);
+        return vertex;
     }
 
     /// <summary>
@@ -68,7 +70,7 @@ public class Graph(GraphType type, GraphWeighting weighting)
     ///     create edge between vertex1 and vertex2 with name/description and weighting
     /// </code>
     /// </summary>
-    public void CreateEdge(string content, Vertex vertex1, Vertex vertex2, double? weight)
+    public Edge CreateEdge(string content, Vertex vertex1, Vertex vertex2, double? weight)
     {
 
         if (!IsInGraph(vertex1) || !IsInGraph(vertex2))
@@ -90,6 +92,8 @@ public class Graph(GraphType type, GraphWeighting weighting)
                 Edges.Add(edge);
                 break;
         }
+
+        return edge;
 
     }
 

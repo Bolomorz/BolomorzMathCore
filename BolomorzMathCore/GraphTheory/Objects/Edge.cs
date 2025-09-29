@@ -79,6 +79,6 @@ public class Edge
         => A.EID == B.EID;
 
     public static bool operator !=(Edge A, Edge B)
-        => A.EID != B.EID;
+        => !(A == B);
 
 }

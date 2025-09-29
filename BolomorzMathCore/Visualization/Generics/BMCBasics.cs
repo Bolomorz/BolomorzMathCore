@@ -3,37 +3,59 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Visualization.Base;
 
-public class BMCPoint
+public class BMCPoint(Number x, Number y)
 {
-    public required Number X { get; set; }
-    public required Number Y { get; set; }
+    public Number X { get; private set; } = x;
+    public Number Y { get; private set; } = y;
+
+    public void Set(Number? x, Number? y)
+    {
+        if (x is not null) X = x;
+        if (y is not null) Y = y;
+        UpdateParent();
+    }
+
+    internal void UpdateParent()
+    {
+        foreach (var parent in Parents)
+            parent.Update();
+    }
+
+    internal List<IBMCElement> Parents { get; set; } = [];
 }
 
 public class BMCCanvas
 {
-    public required Number Width { get; set; }
-    public required Number Height { get; set; }
-
-    internal List<BMCCollection> Collections { get; set; } = [];
-    public BMCCollection[] GetCollections() => [.. Collections];
-
-    internal void Clear()
-    {
-        Collections.Clear();
-    }
+    internal BMCCollection Collection { get; set; } = new();
+    public BMCCollection GetCollection() => Collection;
 }
 
 public class BMCCollection
 {
-    internal Color Color { get; set; }
-    public Color GetColor()
-        => Color;
+    internal List<BMCPoint> Points { get; set; } = [];
+    public BMCPoint[] GetPoints()
+        => [.. Points];
 
-    internal List<BMCPoint>? Points { get; set; }
-    public BMCPoint[]? GetPoints()
-        => Points is not null ? [.. Points] : null;
+    internal List<BMCGeometryBase> Geometries { get; set; } = [];
+    public BMCGeometryBase[] GetGeometries()
+        => [.. Geometries];
 
-    internal List<BMCGeometryBase>? Geometries { get; set; }
-    public BMCGeometryBase[]? GetGeometries()
-        => Geometries is not null ? [.. Geometries] : null;
+    internal void Add(BMCCollection other)
+    {
+        foreach (var point in other.Points)
+            Points.Add(point);
+
+        foreach (var geometry in other.Geometries)
+            Geometries.Add(geometry);
+    }
+
+    internal void Add(BMCPoint point)
+    {
+        Points.Add(point);
+    }
+
+    internal void Add(BMCGeometryBase geometry)
+    {
+        Geometries.Add(geometry);
+    }
 }

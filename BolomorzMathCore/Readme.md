@@ -4,6 +4,70 @@ Library aiming to implement mathematical structures and their algorithms
 
 !!! Work in progress !!!
 
+# Structure
+- **BolomorzMathCore**
+    - ---
+    - **Basics**: base classes for numbers and algorithms
+        - **Complex**: Complex Number
+        - **Number**: Real Number
+        - **AlgorithmBase**: base class for algorithms with `generics<T, U>`
+    - ---
+    - **Analysis**: algorithms on relations and functions in a x-y coordinate system
+        - **Objects**:
+            - **Axis**: axis in x-y coordinate system
+            - **Chart**: x-y coordinate system
+            - **Function**: relation `f(x) = y`, 1 y for each x
+            - **Point**: (x, y)-tuple/point
+            - **Series**: series of (x, y)-tuple/points | scatter
+        - **Algorithms**:
+            - **Regression**: finding best-fit-function for a series/scatter
+    - ---
+    - **GraphTheory**: algorithms on graphs (for now `graph=vertices&edges`)
+        - **Objects**:
+            - **Edge**: edge connection two vertices of a graph
+            - **Vertex**: point/intersection-element of a graph
+            - **Graph**: collection of vertices and edges
+        - **Algorithms**:
+            - **AlgorithmResult<T>**: base class for algorithm results `T = [ShortestPath, etc]`
+            - **BellmanFord**: shortest-path algorithm
+            - **Dijkstra**: shortest-path algorithm
+    - ---
+    - **Linear Algebra**: algorithms on vectors and matrices
+        - **Base**:
+            - **MatrixBase**: base class for matrices
+            - **DeterminantBase**: base class for determinants
+            - **VectorBase**: base class for vectors
+        - **Objects**:
+            - **Matrix**: ComplexMatrix, NumberMatrix
+            - **Determinant**: ComplexDeterminant, NumberDeterminant
+            - **Vector**: ComplexVector, NumberVector
+        - **Algorithms**:
+            - **CharacteristicPolynomial**: finding characteristic polynomial of a matrix
+            - **BairstowAlgorithm**: finding eigenvalues of a matrix with characteristic polynomial
+            - **HessenbergTransform**: preparing matrix for qr-transform | eliminating most of the upper half above the diagonal
+            - **QR-Transform**: eliminating the upper half above the diagonal to find the eigenvalues of a matrix
+    - ---
+    - **Visualization**: visualization and interaction with elements of this library | generally on a canvas | prefix BMC for identification
+        - **BMCSettings**: settings for different elements
+        - **Command**: commands on an element returning a solution //for now not used
+        - **Generics**:
+            - **Basics**:
+                - **BMCPoint**: point on canvas
+                - **BMCCanvas**: collection of geometries for all elements
+                - **BMCCollection**: collection of geometries for one element
+            - **BMCElementBase**: base class for all elements `generic T=[Vertex, Edge, Matrix, Series...]`
+            - **BMCGeometryBase**: base class for geometry-objects
+        - **Geometry**: different geometries depicting the elements | transformations on those elements
+            - **BMCArc**: circle, half-circle...
+            - **BMCArrow**: arrow/pointer/direction
+            - **BMCLine**: connector
+            - **BMCPolygon**: rectangle, triangle...
+            - **BMCText**: descriptions, values...
+        - **Graph**:
+            - **BMCGraph**: interaction for a graph consisting of vertices and edges
+            - **BMCVertex**: interaction for a vertex of this graph
+            - **BMCEdge**: interaction for an edge of this graph
+
 # Table of Contents
 
 # Matrices
