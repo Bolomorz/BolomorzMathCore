@@ -1,3 +1,4 @@
+using BolomorzMathCore.Analysis.Functions;
 using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Algorithms;
@@ -32,37 +33,37 @@ namespace BolomorzMathCore.Analysis.Algorithms;
 /// 
 /// </code>
 /// </summary>
-/// <see cref="Function"/> 
-public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoint>, Function>(points, Function.NaF())
+/// <see cref="FunctionBase{Number, U}"/> 
+public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoint>, IFunction<Number>>(points, NaF.Default)
 {
     public Regression PolynomialRegression(int order)
     {
         var reg = RegressionAlgorithms.PolynomialRegression(order, Input);
-        Result = reg is not null ? Function.Polynomial(reg) : Function.NaF();
+        Result = reg is not null ? FPolynomial.Regression(reg) : NaF.Default;
         return this;
     }
     public Regression LinearRegression()
     {
         var reg = RegressionAlgorithms.LinearRegression(Input);
-        Result = reg is not null ? Function.Line(reg[0], reg[1]) : Function.NaF();
+        Result = reg is not null ? FLine.Regression(reg[0], reg[1]) : NaF.Default;
         return this;
     }
     public Regression PowerRegression()
     {
         var reg = RegressionAlgorithms.PowerRegression(Input);
-        Result = reg is not null ? Function.Power(reg[0], reg[1]) : Function.NaF();
+        Result = reg is not null ? FPower.Regression(reg[0], reg[1]) : NaF.Default;
         return this;
     }
     public Regression LogarithmicRegression()
     {
         var reg = RegressionAlgorithms.LogarithmicRegression(Input);
-        Result = reg is not null ? Function.Logarithm(reg[0], reg[1]) : Function.NaF();
+        Result = reg is not null ? FLogarithm.Regression(reg[0], reg[1]) : NaF.Default;
         return this;
     }
     public Regression ExponentialRegression()
     {
         var reg = RegressionAlgorithms.ExponentialRegression(Input);
-        Result = reg is not null ? Function.Exponential(reg[0], reg[1]) : Function.NaF();
+        Result = reg is not null ? FExponential.Regression(reg[0], reg[1]) : NaF.Default;
         return this;
     }
 }
@@ -70,14 +71,14 @@ public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoi
 internal static class RegressionAlgorithms
 {
 
-    internal static double[]? LinearRegression(List<SeriesPoint> points)
+    internal static Number[]? LinearRegression(List<SeriesPoint> points)
     {
         int n = points.Count;
 
-        double sumX = 0;
-        double sumXX = 0;
-        double sumY = 0;
-        double sumXY = 0;
+        Number sumX = new(0);
+        Number sumXX = new(0);
+        Number sumY = new(0);
+        Number sumXY = new(0);
 
         for (int i = 0; i < n; i++)
         {
@@ -87,120 +88,120 @@ internal static class RegressionAlgorithms
             sumXY += points[i].X * points[i].Y;
         }
 
-        double b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-        double a = (sumY - b * sumX) / n;
+        Number b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        Number a = (sumY - b * sumX) / n;
 
         return [a, b];
     }
 
-    internal static double[]? PowerRegression(List<SeriesPoint> points)
+    internal static Number[]? PowerRegression(List<SeriesPoint> points)
     {
         int n = points.Count;
 
-        double sumX = 0;
-        double sumXX = 0;
-        double sumY = 0;
-        double sumXY = 0;
+        Number sumX = new(0);
+        Number sumXX = new(0);
+        Number sumY = new(0);
+        Number sumXY = new(0);
 
         for (int i = 0; i < n; i++)
         {
-            sumX += Math.Log(points[i].X);
-            sumXX += Math.Log(points[i].X) * Math.Log(points[i].X);
-            sumY += Math.Log(points[i].Y);
-            sumXY += Math.Log(points[i].X) * Math.Log(points[i].Y);
+            sumX += Math.Log(points[i].X.Re);
+            sumXX += Math.Log(points[i].X.Re) * Math.Log(points[i].X.Re);
+            sumY += Math.Log(points[i].Y.Re);
+            sumXY += Math.Log(points[i].X.Re) * Math.Log(points[i].Y.Re);
         }
 
-        double b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-        double a = (sumY - b * sumX) / n;
+        Number b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        Number a = (sumY - b * sumX) / n;
 
-        return [Math.Exp(a), b];
+        return [a.Exp(), b];
     }
 
-    internal static double[]? ExponentialRegression(List<SeriesPoint> points)
+    internal static Number[]? ExponentialRegression(List<SeriesPoint> points)
     {
         int n = points.Count;
 
-        double sumX = 0;
-        double sumXX = 0;
-        double sumY = 0;
-        double sumXY = 0;
+        Number sumX = new(0);
+        Number sumXX = new(0);
+        Number sumY = new(0);
+        Number sumXY = new(0);
 
         for (int i = 0; i < n; i++)
         {
             sumX += points[i].X;
             sumXX += points[i].X * points[i].X;
-            sumY += Math.Log(points[i].Y);
-            sumXY += points[i].X * Math.Log(points[i].Y);
+            sumY += Math.Log(points[i].Y.Re);
+            sumXY += points[i].X * Math.Log(points[i].Y.Re);
         }
 
-        double b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-        double a = (sumY - b * sumX) / n;
+        Number b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        Number a = (sumY - b * sumX) / n;
 
-        return [Math.Exp(a), Math.Exp(b)];
+        return [a.Exp(), b.Exp()];
     }
 
-    internal static double[]? LogarithmicRegression(List<SeriesPoint> points)
+    internal static Number[]? LogarithmicRegression(List<SeriesPoint> points)
     {
         int n = points.Count;
 
-        double sumX = 0;
-        double sumXX = 0;
-        double sumY = 0;
-        double sumXY = 0;
+        Number sumX = new(0);
+        Number sumXX = new(0);
+        Number sumY = new(0);
+        Number sumXY = new(0);
 
         for (int i = 0; i < n; i++)
         {
-            sumX += Math.Log(points[i].X);
-            sumXX += Math.Log(points[i].X) * Math.Log(points[i].X);
+            sumX += Math.Log(points[i].X.Re);
+            sumXX += Math.Log(points[i].X.Re) * Math.Log(points[i].X.Re);
             sumY += points[i].Y;
-            sumXY += Math.Log(points[i].X) * points[i].Y;
+            sumXY += Math.Log(points[i].X.Re) * points[i].Y;
         }
 
-        double b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
-        double a = (sumY - b * sumX) / n;
+        Number b = (n * sumXY - sumX * sumY) / (n * sumXX - sumX * sumX);
+        Number a = (sumY - b * sumX) / n;
 
         return [a, b];
     }
 
-    internal static double[]? PolynomialRegression(int order, List<SeriesPoint> points)
+    internal static Number[]? PolynomialRegression(int order, List<SeriesPoint> points)
     {
         return new AugmentedCoefficientMatrix(order, points).GetSolution();
     }
     
     private class AugmentedCoefficientMatrix
     {
-        private double[,] Matrix;
+        private Number[,] Matrix;
         private int n;
         private int m;
         public AugmentedCoefficientMatrix(int order, List<SeriesPoint> points)
         {
             m = points.Count;
             n = order + 1;
-            Matrix = new double[n, n+1];
+            Matrix = new Number[n, n+1];
             for(int i = 1; i <=n; i++)
             {
-                double sum;
+                Number sum;
                 for(int j = 1; j <= i; j++)
                 {
-                    int k = i + j - 2;
-                    sum = 0;
-                    for(int l = 1; l <= m; l++) sum += Math.Pow(points[l-1].X, k);
+                    Number k = new(i + j - 2);
+                    sum = new(0);
+                    for(int l = 1; l <= m; l++) sum += points[l-1].X.Pow(k);
                     Matrix[i-1, j-1] = sum;
                     Matrix[j-1, i-1] = sum;
                 }
-                sum = 0;
-                for(int l = 1; l <= m; l++) sum += points[l-1].Y * Math.Pow(points[l-1].X, i-1);
+                sum = new(0);
+                for(int l = 1; l <= m; l++) sum += points[l-1].Y * points[l-1].X.Pow(new(i-1));
                 Matrix[i-1, n] = sum;
             }
         }
 
-        public double[]? GetSolution()
+        public Number[]? GetSolution()
         {
             try
             {
                 if(m < n+1) return null;
                 ApplyGaussJordanElimination();
-                double[] solution = new double[n];
+                Number[] solution = new Number[n];
                 for(int i = 0; i < n; i++) solution[i] = Matrix[i, n]/Matrix[i, i];
                 return solution;
             }
@@ -214,12 +215,12 @@ internal static class RegressionAlgorithms
         {
             for(int i = 0; i < n; i++)
             {
-                if(Matrix[i, i] == 0) throw new DivideByZeroException();
+                if(Matrix[i, i] == Number.Zero) throw new DivideByZeroException();
                 for(int j = 0; j < n; j++)
                 {
                     if(i != j)
                     {
-                        double Ratio = Matrix[j, i] / Matrix[i, i];
+                        Number Ratio = Matrix[j, i] / Matrix[i, i];
                         for(int k = 0; k <= n; k++) Matrix[j, k] -= Ratio * Matrix[i, k];
                     }
                 }

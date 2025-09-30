@@ -1,3 +1,5 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Analysis;
 
 /// <summary>
@@ -25,22 +27,22 @@ namespace BolomorzMathCore.Analysis;
 /// </summary>
 /// <see cref="Series"/> 
 /// <see cref="Chart"/> 
-public class Axis(string name, string unit, double min, double max)
+public class Axis(string name, string unit, Number min, Number max)
 {
     public string Name { get; private set; } = name;
     public string Unit { get; private set; } = unit;
     public double LastVal { get; private set; } = double.MinValue;
-    public double Min { get; private set; } = min;
-    public double Max { get; private set; } = max;
-    public double DefaultMin { get; private set; } = min;
-    public double DefaultMax { get; private set; } = max;
+    public Number Min { get; private set; } = min;
+    public Number Max { get; private set; } = max;
+    public Number DefaultMin { get; private set; } = min;
+    public Number DefaultMax { get; private set; } = max;
 
     /// <summary>
     /// <code>
     /// SetMin: set Min value | current minimum value of selected area in C
     /// </code>
     /// </summary>
-    public void SetMin(double min)
+    public void SetMin(Number min)
     {
         if (min > Max) return;
         Min = min;
@@ -50,7 +52,7 @@ public class Axis(string name, string unit, double min, double max)
     /// SetMax: set Max value | current maximum value of selected area in C
     /// </code>
     /// </summary>
-    public void SetMax(double max)
+    public void SetMax(Number max)
     {
         if (max < Min) return;
         Max = max;
@@ -74,56 +76,56 @@ public class Axis(string name, string unit, double min, double max)
         Max = DefaultMax;
     }
 
-    internal void CompareMax(double value)
+    internal void CompareMax(Number value)
     {
         if (value > Max)
         {
-            double val = 1;
+            Number val = new(1);
 
             while (value > val)
                 val *= 10;
-            val = val == 1 ? 1 : val / 10;
+            val = val == Number.One ? new(1) : val / 10;
 
-            Max = 0;
+            Max = new(0);
             while (value > Max)
                 Max += val;
 
             DefaultMax = Max;
         }
     }
-    internal void CompareMin(double value)
+    internal void CompareMin(Number value)
     {
         if (value < Min)
         {
-            double val;
-            if (value < 0)
+            Number val;
+            if (value < Number.Zero)
             {
-                val = -1;
+                val = new(-1);
 
                 while (value < val)
                     val *= 10;
 
-                val = val == -1 ? -1 : val / 10;
+                val = val == Number.MinusOne ? new(-1) : val / 10;
 
-                Min = 0;
+                Min = new(0);
                 while (value < Min)
                     Min += val;
             }
             else
             {
-                val = 1;
+                val = new(1);
 
                 while (value > val)
                     val += 10;
 
-                val = val == 1 ? 1 : val / 10;
+                val = val == Number.MinusOne ? new(1) : val / 10;
 
-                Min = 0;
+                Min = new(0);
                 while (value > Min + val)
                     Min += val;
             }
 
-            if (Min < 0)
+            if (Min < Number.Zero)
             {
                 if ((-1) * Min < Max / 10)
                     Min = (-1) * (Max / 10);
@@ -131,7 +133,7 @@ public class Axis(string name, string unit, double min, double max)
             else
             {
                 if (Min < Max / 10)
-                    Min = 0;
+                    Min = new(0);
             }
 
             DefaultMin = Min;

@@ -1,3 +1,5 @@
+using BolomorzMathCore.Basics;
+
 namespace BolomorzMathCore.Analysis;
 
 /// <summary>
@@ -14,6 +16,6 @@ namespace BolomorzMathCore.Analysis;
 /// <see cref="Series"/> 
 public class SeriesPoint
 {
-    public required double X { get; set; }
-    public required double Y { get; set; }
+    public required Number X { get; set; }
+    public required Number Y { get; set; }
 }

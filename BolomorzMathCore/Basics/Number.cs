@@ -1,3 +1,5 @@
+using System.Reflection;
+
 namespace BolomorzMathCore.Basics;
 
 public class Number
@@ -6,6 +8,9 @@ public class Number
 
     public static readonly Number Tolerance = new(double.Epsilon);
     public static readonly Number Zero = new();
+    public static readonly Number One = new(1);
+    public static readonly Number MinusOne = new(-1);
+    public static readonly Number NaN = new(double.NaN);
 
     public Number(double re)
     {
@@ -19,6 +24,27 @@ public class Number
     {
         Re = 0;
     }
+
+    public double Round(int precision)
+        => Math.Round(Re, precision);
+
+    public Number Mod(Number other)
+    {
+        Number a = this < Zero ? new(-this) : new(this);
+        Number b = other < Zero ? new(-other) : new(other);
+
+        Number mod = new(a);
+        while (mod >= b)
+            mod -= b;
+
+        return a < Zero ? -mod : mod;
+    }
+
+    public Number Pow(Number expo)
+        => new(Math.Pow(Re, expo.Re));
+
+    public Number Exp()
+        => new(Math.Exp(Re));
 
     public Number Square()
         => new(Re * Re);
