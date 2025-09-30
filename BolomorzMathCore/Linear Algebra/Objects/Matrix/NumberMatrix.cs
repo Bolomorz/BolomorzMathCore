@@ -167,8 +167,8 @@ public class NMatrix : MatrixBase<Number>
         else
         {
             Number tan = x2 / x1;
-            sin = tan / (1.0 + tan * tan).SquareRoot();
-            cos = 1.0 / (1.0 + tan * tan).SquareRoot();
+            sin = tan / (1.0 + tan * tan).SquareRoot().Re;      //here: Re is positive => SquareRoot(Sqrt(Re) | 0)
+            cos = new(1.0 / (1.0 + tan * tan).SquareRoot().Re); //here: Re is positive => SquareRoot(Sqrt(Re) | 0)
         }
 
         for (int i = 0; i < n; i++)
@@ -302,8 +302,8 @@ public class NMatrix : MatrixBase<Number>
     public override NMatrix Inverse()
     {
 
-        if (!IsRegular()) throw new Exception("cannot calculate inverse of non regular matrix.");
-        if (!IsQuadratic()) throw new Exception("cannot calculate inverse of non quadratic matrix.");
+        if (!IsRegular()) throw new Exception($"cannot calculate inverse of non regular matrix. [|M|={Determinant}]");
+        if (!IsQuadratic()) throw new Exception($"cannot calculate inverse of non quadratic matrix. [M({Rows}x{Cols})]");
 
         CalculateDeterminant();
         if (Determinant is null) throw new Exception("failed to calculate determinant");
@@ -341,7 +341,7 @@ public class NMatrix : MatrixBase<Number>
     public override Number Trace()
     {
 
-        if (!IsQuadratic() ) throw new Exception("cannot calculate trace of non quadratic matrix.");
+        if (!IsQuadratic() ) throw new Exception($"cannot calculate trace of non quadratic matrix. [M({Rows}x{Cols})]");
 
         Number trace = new();
 
@@ -495,7 +495,7 @@ public class NMatrix : MatrixBase<Number>
     public static NMatrix operator +(NMatrix A, NMatrix B)
     {
 
-        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception("cannot add two matrices of different type.");
+        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception($"cannot add two matrices of these dimensions. [A({A.Rows}x{A.Cols}) | B({B.Rows}x{B.Cols})]");
 
         Number[,] sum = new Number[A.Rows, A.Cols];
 
@@ -508,7 +508,7 @@ public class NMatrix : MatrixBase<Number>
     public static NMatrix operator -(NMatrix A, NMatrix B)
     {
 
-        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception("cannot subtract two matrices of different type.");
+        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception($"cannot subtract two matrices of these dimensions. [A({A.Rows}x{A.Cols}) | B({B.Rows}x{B.Cols})]");
 
         Number[,] diff = new Number[A.Rows, A.Cols];
 
@@ -534,7 +534,7 @@ public class NMatrix : MatrixBase<Number>
     public static NMatrix operator *(NMatrix A, NMatrix B)
     {
 
-        if (A.Cols != B.Rows) throw new Exception("cannot multiply two matrices of that type.");
+        if (A.Cols != B.Rows) throw new Exception($"cannot multiply two matrices of these dimensions. [A({A.Rows}x{A.Cols}) | B({B.Rows}x{B.Cols})]");
 
         int n = A.Cols;
         Number[,] product = new Number[A.Rows, B.Cols];

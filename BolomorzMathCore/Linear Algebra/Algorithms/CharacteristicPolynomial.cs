@@ -7,12 +7,12 @@ public class CharacteristicPolynomial : AlgorithmBase<Complex, Complex[]>
 {
     public CharacteristicPolynomial(CMatrix matrix) : base(new(1, 1), [])
     {
-        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate CharacteristicPolynomial of non quadratic matrix.");
+        if (!matrix.IsQuadratic()) throw new Exception($"cannot calculate CharacteristicPolynomial of non quadratic matrix. [M({matrix.Rows}x{matrix.Cols})]");
         Result = FaddeevLeVerrier(matrix);
     }
     public CharacteristicPolynomial(NMatrix matrix) : base(new(1), [])
     {
-        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate CharacteristicPolynomial of non quadratic matrix.");
+        if (!matrix.IsQuadratic()) throw new Exception($"cannot calculate CharacteristicPolynomial of non quadratic matrix. [M({matrix.Rows}x{matrix.Cols})]");
         Result = FaddeevLeVerrier(matrix);
     }
 

@@ -47,3 +47,14 @@ public enum MatrixArray
     /// </summary>
     Vector
 }
+
+public enum SpecialVector
+{
+    Zero
+}
+
+public enum VectorType
+{
+    Row,
+    Column
+}

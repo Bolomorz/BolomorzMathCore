@@ -11,7 +11,7 @@ public abstract class DeterminantBase<T , U> where T : class where U : MatrixBas
 
     public DeterminantBase(U matrix)
     {
-        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate determinant of non quadratric matrix.");
+        if (!matrix.IsQuadratic()) throw new Exception($"cannot calculate determinant of non quadratric matrix. [M({matrix.Rows}x{matrix.Cols})]");
         var decomposition = LUPDecompose(matrix.Values, matrix.Rows);
         Value = decomposition.Success ?
             LUPDeterminant(decomposition, matrix.Rows) :

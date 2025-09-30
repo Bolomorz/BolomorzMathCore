@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BolomorzMathCore")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cdbeca275ff29f273a9ce08bd77f2554b5f578c4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+31d4b5bc9597137bcc0f3d93468707ea4eeb55aa")]
 [assembly: System.Reflection.AssemblyProductAttribute("BolomorzMathCore")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BolomorzMathCore")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

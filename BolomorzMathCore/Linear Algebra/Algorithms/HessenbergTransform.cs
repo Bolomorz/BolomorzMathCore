@@ -7,7 +7,7 @@ public class HessenbergTransform : AlgorithmBase<Complex, CMatrix>
 {
     public HessenbergTransform(CMatrix matrix) : base(new(1, 1), new(SpecialQuadratic.Zero, 0))
     {
-        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate HessenbergTransform of non quadratic matrix.");
+        if (!matrix.IsQuadratic()) throw new Exception($"cannot calculate HessenbergTransform of non quadratic matrix. [M({matrix.Rows}x{matrix.Cols})]");
         int n = matrix.Rows;
         Complex[,] hbtransform = new Complex[n, n];
         Complex[,] m = new Complex[n, n];
@@ -22,7 +22,7 @@ public class HessenbergTransform : AlgorithmBase<Complex, CMatrix>
 
     public HessenbergTransform(NMatrix matrix) : base(new(1), new(SpecialQuadratic.Zero, 0))
     {
-        if (!matrix.IsQuadratic()) throw new Exception("cannot calculate HessenbergTransform of non quadratic matrix.");
+        if (!matrix.IsQuadratic()) throw new Exception($"cannot calculate HessenbergTransform of non quadratic matrix. [M({matrix.Rows}x{matrix.Cols})]");
         int n = matrix.Rows;
         Complex[,] hbtransform = new Complex[n, n];
         Complex[,] m = new Complex[n, n];

@@ -314,11 +314,11 @@ public class CMatrix : MatrixBase<Complex>
     public override CMatrix Inverse()
     {
 
-        if (!IsRegular()) throw new Exception("cannot calculate inverse of non regular matrix.");
-        if (!IsQuadratic()) throw new Exception("cannot calculate inverse of non quadratic matrix.");
+        if (!IsRegular()) throw new Exception($"cannot calculate inverse of non regular matrix. [|M|={Determinant}]");
+        if (!IsQuadratic()) throw new Exception($"cannot calculate inverse of non quadratic matrix. [M({Rows}x{Cols})]");
 
         CalculateDeterminant();
-        if (Determinant is null) throw new Exception("failed to calculate determinant");
+        if (Determinant is null) throw new Exception($"failed to calculate determinant");
         Complex determinant = Determinant;
 
         Complex[,] inverse = new Complex[Rows, Cols];
@@ -375,7 +375,7 @@ public class CMatrix : MatrixBase<Complex>
     public override Complex Trace()
     {
 
-        if (!IsQuadratic()) throw new Exception("cannot calculate trace of non quadratic matrix.");
+        if (!IsQuadratic()) throw new Exception($"cannot calculate trace of non quadratic matrix. [M({Rows}x{Cols})]");
 
         Complex trace = new();
 
@@ -544,7 +544,7 @@ public class CMatrix : MatrixBase<Complex>
     public static CMatrix operator +(CMatrix A, CMatrix B)
     {
 
-        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception("cannot add two matrices of different type.");
+        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception($"cannot add two matrices of these dimension. [A({A.Rows}x{A.Cols}) | B({B.Rows}x{B.Cols})]");
 
         Complex[,] sum = new Complex[A.Rows, A.Cols];
 
@@ -557,7 +557,7 @@ public class CMatrix : MatrixBase<Complex>
     public static CMatrix operator -(CMatrix A, CMatrix B)
     {
 
-        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception("cannot subtract two matrices of different type.");
+        if (A.Rows != B.Rows || A.Cols != B.Cols) throw new Exception($"cannot subtract two matrices of these dimensions. [A({A.Rows}x{A.Cols}) | B({B.Rows}x{B.Cols})]");
 
         Complex[,] diff = new Complex[A.Rows, A.Cols];
 
@@ -595,7 +595,7 @@ public class CMatrix : MatrixBase<Complex>
     public static CMatrix operator *(CMatrix A, CMatrix B)
     {
 
-        if (A.Cols != B.Rows) throw new Exception("cannot multiply two matrices of that type.");
+        if (A.Cols != B.Rows) throw new Exception($"cannot multiply two matrices of these dimensions. [A({A.Rows}x{A.Cols}) | B({B.Rows}x{B.Cols})]");
 
         int n = A.Cols;
         Complex[,] product = new Complex[A.Rows, B.Cols];
@@ -616,7 +616,7 @@ public class CMatrix : MatrixBase<Complex>
     }
     public static CMatrix operator *(NMatrix A, CMatrix B)
     {
-        if (A.Cols != B.Rows) throw new Exception("cannot multiply two matrices of that type.");
+        if (A.Cols != B.Rows) throw new Exception($"cannot multiply two matrices of these dimensions. [A({A.Rows}x{A.Cols}) | B({B.Rows}x{B.Cols})]");
 
         int n = A.Cols;
         Complex[,] product = new Complex[A.Rows, B.Cols];
