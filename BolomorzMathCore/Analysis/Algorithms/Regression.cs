@@ -34,36 +34,36 @@ namespace BolomorzMathCore.Analysis.Algorithms;
 /// </code>
 /// </summary>
 /// <see cref="FunctionBase{Number, U}"/> 
-public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoint>, IFunction<Number>>(points, NaF.Default)
+public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoint>, IFunction<Number>>(points, FConstant.NaF)
 {
     public Regression PolynomialRegression(int order)
     {
         var reg = RegressionAlgorithms.PolynomialRegression(order, Input);
-        Result = reg is not null ? FPolynomial.Regression(reg) : NaF.Default;
+        Result = reg is not null ? FPolynomial.Regression(reg) : FConstant.NaF;
         return this;
     }
     public Regression LinearRegression()
     {
         var reg = RegressionAlgorithms.LinearRegression(Input);
-        Result = reg is not null ? FLine.Regression(reg[0], reg[1]) : NaF.Default;
+        Result = reg is not null ? FLine.Regression(reg[0], reg[1]) : FConstant.NaF;
         return this;
     }
     public Regression PowerRegression()
     {
         var reg = RegressionAlgorithms.PowerRegression(Input);
-        Result = reg is not null ? FPower.Regression(reg[0], reg[1]) : NaF.Default;
+        Result = reg is not null ? FPower.Regression(reg[0], reg[1]) : FConstant.NaF;
         return this;
     }
     public Regression LogarithmicRegression()
     {
         var reg = RegressionAlgorithms.LogarithmicRegression(Input);
-        Result = reg is not null ? FLogarithm.Regression(reg[0], reg[1]) : NaF.Default;
+        Result = reg is not null ? FLogarithm.Regression(reg[0], reg[1]) : FConstant.NaF;
         return this;
     }
     public Regression ExponentialRegression()
     {
         var reg = RegressionAlgorithms.ExponentialRegression(Input);
-        Result = reg is not null ? FExponential.Regression(reg[0], reg[1]) : NaF.Default;
+        Result = reg is not null ? FExponential.Regression(reg[0], reg[1]) : FConstant.NaF;
         return this;
     }
 }

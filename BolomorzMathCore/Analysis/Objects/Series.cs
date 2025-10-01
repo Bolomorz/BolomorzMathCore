@@ -49,7 +49,7 @@ public class Series(string name, string unit, Color color)
     public Axis Axis { get; private set; } = new(name, unit, new(double.MaxValue), new(double.MinValue));
     public bool Active { get; set; } = true;
     public int Precision { get; set; } = 5;
-    public IFunction<Number> Function { get; private set; } = NaF.Default;
+    public IFunction<Number> Function { get; private set; } = FConstant.NaF;
     public Color Color { get; set; } = color;
 
     /// <summary>
@@ -88,7 +88,7 @@ public class Series(string name, string unit, Color color)
             case FunctionType.Exponential:
                 Function = reg.ExponentialRegression().GetResult(); break;
             default:
-                Function = NaF.Default; break;
+                Function = FConstant.NaF; break;
         }
     }
 
@@ -98,5 +98,5 @@ public class Series(string name, string unit, Color color)
     /// </code>
     /// </summary>
     public FunctionStringCollection GetFunction()
-        => Function.GetStringCollection(Precision);
+        => Function.GetStringCollection(Precision, CompositionType.CompositeFunction);
 }

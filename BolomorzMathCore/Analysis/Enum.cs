@@ -3,7 +3,7 @@ namespace BolomorzMathCore.Analysis;
 /// <summary>
 /// <code>
 /// FunctionType | type of function
-/// - NaF:          f(x) = not a function
+/// - Constant:     f(x) = constant
 /// - Line:         f(x) = coeff0 + coeff1 * x
 /// - Polynomial:   f(x) = Sum[i from 0 to n](coeff[i] * x^i)
 /// - Exponential:  f(x) = coeff * base^x
@@ -15,10 +15,10 @@ public enum FunctionType
 {
     /// <summary>
     /// <code>
-    /// NaF:            f(x) = not a function
+    /// Constant:            f(x) = not a function or constant
     /// </code>
     /// </summary>
-    NaF,
+    Constant,
 
     /// <summary>
     /// <code>
@@ -54,4 +54,17 @@ public enum FunctionType
     /// </code>
     /// </summary>
     Exponential
+}
+
+public enum CompositionType
+{
+    CompositeFunction,
+    SubFunction
+}
+
+public enum Script
+{
+    Superscript,
+    Baseline,
+    Subscript
 }

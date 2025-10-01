@@ -2,26 +2,54 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Functions;
 
-public class FPower(Number coeff, Number expo, Number c) :
-FunctionBase<Number, (Number Coeff, Number Expo, Number C)>((coeff, expo, c), FunctionType.Power)
+public class FPower(IFunction<Number> coeff, IFunction<Number> expo, IFunction<Number> c) :
+FunctionBase<Number, (IFunction<Number> Coeff, IFunction<Number> Expo, IFunction<Number> C)>((coeff, expo, c), FunctionType.Power)
 {
-    public override FunctionStringCollection GetStringCollection(int precision)
+    public override FunctionStringCollection GetStringCollection(int precision, CompositionType type)
     {
-        var fscoll = new FunctionStringCollection();
-        var coeff = Values.Coeff.Round(precision);
-        var expo = Values.Expo.Round(precision);
-        var c = Values.C.Round(precision);
-        fscoll._FunctionStrings.Add(new($"y = {coeff} * (x", false));
-        fscoll._FunctionStrings.Add(new($"{expo}", true));
-        fscoll._FunctionStrings.Add(new($")", false));
-        if (c != 0)
-            fscoll._FunctionStrings.Add(new(c < 0 ? $" - {-c}" : $" + {c}", false));
+        var fscoll = new FunctionStringCollection(type);
+        var coeff = Values.Coeff.GetStringCollection(precision, CompositionType.SubFunction);
+        var expo = Values.Expo.GetStringCollection(precision, CompositionType.SubFunction);
+        var c = Values.C.GetStringCollection(precision, CompositionType.SubFunction);
+        if (!coeff.IsEmpty())
+        {
+            fscoll.Add(coeff);
+            fscoll.Add(new FunctionString(" * (x", Script.Baseline));
+
+        }
+        else
+        {
+            fscoll.Add(new FunctionString("x", Script.Baseline));
+        }
+        if (!expo.IsEmpty())
+        {
+            fscoll.Add(expo, Script.Superscript);
+        }
+        if (!coeff.IsEmpty())
+        {
+            fscoll.Add(new FunctionString(")", Script.Baseline));
+
+        }
+        if (!c.IsEmpty())
+        {
+            fscoll.Add(new FunctionString(" + ", Script.Baseline));
+            fscoll.Add(c);
+        }
+        if (type == CompositionType.CompositeFunction)
+            fscoll.Reduce();
         return fscoll;
     }
 
-    public override Number GetValue(Number xvalue)
-        => Values.Coeff * xvalue.Pow(Values.Expo) + Values.C;
+    public override Number? GetValue(Number xvalue)
+    {
+        var c1 = Values.Coeff.GetValue(xvalue);
+        var e = Values.Expo.GetValue(xvalue);
+        var c = Values.C.GetValue(xvalue);
+        if (c1 is null && e is null && c is null) return null;
+        return (c1 is not null ? c1 : Number.One) * (e is not null ? xvalue.Pow(e) : Number.One) + (c is not null ? c : Number.Zero);
+    }
+    //Values.Coeff * xvalue.Pow(Values.Expo) + Values.C;
 
     public static FPower Regression(Number coeff, Number expo)
-        => new(coeff, expo, new(0));
+        => new(new FConstant(coeff), new FConstant(expo), FConstant.NaF);
 }
