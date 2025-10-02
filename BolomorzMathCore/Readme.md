@@ -4,6 +4,21 @@ Library aiming to implement mathematical structures and their algorithms
 
 !!! Work in progress !!!
 
+# Abstraction
+
+different abstraction layers on how this library can be used:
+
+abstraction layers:
+- `number-types`: `Number|Complex`
+- `structure-types<Number|Complex>`: `Edge|Vertex|Graph|Function<Number>|Relation<Number>|NMatrix|CMatrix|NVector|CVector...`
+- `algorithms<structure<Number|Complex>>`: `Regression<Relation<Number>, Function<Number>> | Dijkstra<Graph, AlgorithmResult<ShortestPath>> ...`
+- `visualization<structure<Number|Complex>>`: `BMCCanvas|BMCArc|BMCLine...`
+
+> - own number types -> `structure<OwnType>` -> `algorithms<structure<OwnType>>` -> `visualization<structure<OwnType>>` using base classes
+> - additional structures `structure<Number|Complex>`
+> - additional algorithms `algorithm<structure<Number|Complex>>`
+> - using own visualization layer with/without using `BMCObjects`
+
 # Structure
 - **BolomorzMathCore**
     - ---
@@ -13,14 +28,24 @@ Library aiming to implement mathematical structures and their algorithms
         - **AlgorithmBase**: base class for algorithms with `generics<T, U>`
     - ---
     - **Analysis**: algorithms on relations and functions in a x-y coordinate system
+        - **Base**:
+            - **FunctionBase**: base class for `functions<T>`: `f(x) = <g{i}(x)>: f(x) is a tuple of n sub-functions g{i}(x) | i from 1 to n`
+            - **FunctionString**: string representation of function f(x)
         - **Objects**:
             - **Axis**: axis in x-y coordinate system
             - **Chart**: x-y coordinate system
             - **Function**: relation `f(x) = y`, 1 y for each x
             - **Point**: (x, y)-tuple/point
             - **Series**: series of (x, y)-tuple/points | scatter
+        - **Function**:
+            - **Constant**:     constant number `f(x) = c`
+            - **Exponential**:  `f(x) = a(x) * b(x)^x + c(x)`
+            - **Line**:         `f(x) = a(x) + b(x) * x`
+            - **Logarithm**:    `f(x) = a(x) + b(x) * ln(c(x) + d(x) * x) + e(x)`
+            - **Polynomial**:   `f(x) = sum(f{i}(x): a{i}(x) * x^i)`
+            - **Power**:        `f(x) = a(x) * x^b(x) + c(x)`
         - **Algorithms**:
-            - **Regression**: finding best-fit-function for a series/scatter
+            - **Regression**: finding best-fit-function for a series/scatter: `AlgorithmBase<Series, Function<Number>>`
     - ---
     - **GraphTheory**: algorithms on graphs (for now `graph=vertices&edges`)
         - **Objects**:
@@ -29,8 +54,8 @@ Library aiming to implement mathematical structures and their algorithms
             - **Graph**: collection of vertices and edges
         - **Algorithms**:
             - **AlgorithmResult<T>**: base class for algorithm results `T = [ShortestPath, etc]`
-            - **BellmanFord**: shortest-path algorithm
-            - **Dijkstra**: shortest-path algorithm
+            - **BellmanFord**: shortest-path algorithm: `AlgorithmBase<Graph, List<AlgorithmResult<ShortestPath>>>`
+            - **Dijkstra**: shortest-path algorithm: `AlgorithmBase<Graph, List<AlgorithmResult<ShortestPath>>>`
     - ---
     - **Linear Algebra**: algorithms on vectors and matrices
         - **Base**:
@@ -42,10 +67,10 @@ Library aiming to implement mathematical structures and their algorithms
             - **Determinant**: ComplexDeterminant, NumberDeterminant
             - **Vector**: ComplexVector, NumberVector
         - **Algorithms**:
-            - **CharacteristicPolynomial**: finding characteristic polynomial of a matrix
-            - **BairstowAlgorithm**: finding eigenvalues of a matrix with characteristic polynomial
-            - **HessenbergTransform**: preparing matrix for qr-transform | eliminating most of the upper half above the diagonal
-            - **QR-Transform**: eliminating the upper half above the diagonal to find the eigenvalues of a matrix
+            - **CharacteristicPolynomial**: finding characteristic polynomial of a matrix: `AlgorithmBase<Matrix, List<Coefficients>>`
+            - **BairstowAlgorithm**: finding eigenvalues of a matrix with characteristic polynomial: `AlgorithmBase<CharacteristicPolynomial, List<Eigenvalues>>`
+            - **HessenbergTransform**: preparing matrix for qr-transform | eliminating most of the upper half above the diagonal: `AlgorithmBase<Matrix, Matrix>`
+            - **QR-Transform**: eliminating the upper half above the diagonal to find the eigenvalues of a matrix: `AlgorithmBase<HessenbergTransform, Matrix>`
     - ---
     - **Visualization**: visualization and interaction with elements of this library | generally on a canvas | prefix BMC for identification
         - **BMCSettings**: settings for different elements
@@ -70,7 +95,49 @@ Library aiming to implement mathematical structures and their algorithms
 
 # Table of Contents
 
-# Matrices
+# Number Types
+
+## Complex Number
+
+## Real Number
+
+# Algorithm Base
+
+# Analysis
+
+## Function Base
+
+## Relation Base
+TODO: relation base: series etc
+
+## Chart
+
+# Linear Algebra
+
+## Matrices
+
+## Vectors
+
+## Algorithms
+
+### Finding Eigenvalues
+
+### TODO: linear independence of vectors
+
+# Graph Theory
+
+## Base Objects
+
+## Algorithms
+
+### Shortest Path
+
+# Visualization
+
+
+
+# OLD
+## Matrices
 
 > Matrices are implemented as complex matrix, where each element is a complex number.</br>
 > A NxM Matrix is a collection of elements organized in a 2-dimensional structure with N rows and M columns.</br>
@@ -275,8 +342,4 @@ Example Matrix `A 2x2`:
 ## Determinant
 
 ## Algorithms - Finding Eigenvalues
-
-# Graphs
-
-# Charts
 
