@@ -1,4 +1,4 @@
-using BolomorzMathCore.Analysis.Functions;
+using BolomorzMathCore.Analysis.Function;
 using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Algorithms;

@@ -3,12 +3,86 @@ using BolomorzMathCore.LinearAlgebra.Base;
 
 namespace BolomorzMathCore.LinearAlgebra.Matrix;
 
+/// <summary>
+/// <code>
+/// Vector of Real Numbers
+/// 
+/// Vector N = Real[N]
+/// Element(i) = Real(i)
+/// 
+/// Special Types:
+/// - special vector (N):
+///     zero: all Elements are 0
+/// - vector types in relation to matrices:
+///     row: vector depicts a row of a matrix
+///     column: vector depicts a column of a matrix
+/// 
+/// Getter:
+/// - GetValue: Element(i,)
+/// 
+/// Transformation on Vector A:
+/// - Normalize: Vector B
+///     normalize vector => |B| = 1
+/// - Direction: Vector B
+///     unit vector in direction of A
+/// - CrossProduct(Vector B): Vector C
+///     A.N=3 & B.N=3 => C.N=3
+/// - Projection(Vector B): Vector C
+///     A.N=B.N => =C.N
+/// 
+/// Properties of Vector A:
+/// - Magnitude: |A|
+/// - IsZero: |A| = 0 ?
+/// - IsUnit: |A| = 1 ?
+/// - AreOrthogonal(Vector B): A * B = 0 ?
+/// - AreCollinear(Vector B): A = k * B ?
+/// 
+/// Operations of Vector A, Vector B, Number N, Matrix M:
+/// - Addition:
+///     A + B | WHEN A.N = B.N : Vector
+/// - Subtraction:
+///     A - B | WHEN A.N = B.N : Vector
+/// - Multiplikation:
+///     N * A : Vector
+///     A * B | WHEN A.N = B.N : Complex
+///     A * M | WHEN A is RowVector & A.N = M.Rows OR WHEN A is ColumnVector & A.N = M.Cols : Matrix
+/// - Comparing:
+///     A is B | A is not B
+/// </code>
+/// </summary>
+/// <see cref="Number"/> 
+/// <see cref="SpecialVector"/> 
+/// <see cref="VectorType"/> 
 public class NVector : VectorBase<Number>
 {
+    /// <summary>
+    /// <code>
+    /// Vector of Real Numbers
+    /// 
+    /// Vector N = Real[N]
+    /// Element(i) = Real(i)
+    /// 
+    /// vector types in relation to matrices:
+    ///     row: vector depicts a row of a matrix
+    ///     column: vector depicts a column of a matrix
+    /// </code>
+    /// </summary>
     public NVector(Number[] values, VectorType type) :
     base(values.Length, values, type)
     { }
-
+    
+    /// <summary>
+    /// <code>
+    /// Vector of Real Numbers
+    /// 
+    /// Special Types:
+    /// - special vector (N):
+    ///     zero: all Elements are 0
+    /// - vector types in relation to matrices:
+    ///     row: vector depicts a row of a matrix
+    ///     column: vector depicts a column of a matrix
+    /// </code>
+    /// </summary>
     public NVector(SpecialVector sv, int n, VectorType type) :
     base(n, new Number[n], type)
     {
@@ -22,6 +96,11 @@ public class NVector : VectorBase<Number>
     }
 
     #region Get
+    /// <summary>
+    /// <code>
+    /// GetValue: Element(i)
+    /// </code>
+    /// </summary>
     public override Number? GetValue(int index)
     {
         if (index > N || index < 1) return null;
@@ -31,6 +110,11 @@ public class NVector : VectorBase<Number>
     #endregion
 
     #region Properties
+    /// <summary>
+    /// <code>
+    /// Magnitude: |A|
+    /// </code>
+    /// </summary>
     public override Number Magnitude()
     {
         Number magnitude = new(0);
@@ -40,21 +124,12 @@ public class NVector : VectorBase<Number>
 
         return magnitude / 2;
     }
-    public override NVector Normalize()
-    {
-        var mag = Magnitude();
-        if (mag == Number.Zero) throw new Exception($"cannot normalize a zero vector. [|V| = {mag}]");
 
-        var norm = new Number[N];
-        for (int j = 0; j < N; j++)
-            norm[j] = Values[j] / mag;
-
-        return new(norm, Type);
-    }
-    public override NVector Direction()
-    {
-        return Normalize();
-    }
+    /// <summary>
+    /// <code>
+    /// IsZero: |A| = 0 ?
+    /// </code>
+    /// </summary>
     public override bool IsZero()
     {
         foreach (var value in Values)
@@ -62,12 +137,30 @@ public class NVector : VectorBase<Number>
                 return false;
         return true;
     }
+
+    /// <summary>
+    /// <code>
+    /// IsUnit: |A| = 1 ?
+    /// </code>
+    /// </summary>
     public override bool IsUnit()
     {
         return Magnitude() == new Number(1);
     }
+
+    /// <summary>
+    /// <code>
+    /// AreOrthogonal(Vector B): A * B = 0 ?
+    /// </code>
+    /// </summary>
     public override bool AreOrthogonal(VectorBase<Number> other)
         => this * other == Number.Zero;
+
+    /// <summary>
+    /// <code>
+    /// AreCollinear(Vector B): A = k * B ?
+    /// </code>
+    /// </summary>
     public override bool AreCollinear(VectorBase<Number> other)
     {
         if (N != other.N) return false;
@@ -96,6 +189,39 @@ public class NVector : VectorBase<Number>
     #endregion
 
     #region Transformation
+    /// <summary>
+    /// <code>
+    /// Normalize: Vector B
+    ///     normalize vector => |B| = 1
+    /// </code>
+    /// </summary>
+    public override NVector Normalize()
+    {
+        var mag = Magnitude();
+        if (mag == Number.Zero) throw new Exception($"cannot normalize a zero vector. [|V| = {mag}]");
+
+        var norm = new Number[N];
+        for (int j = 0; j < N; j++)
+            norm[j] = Values[j] / mag;
+
+        return new(norm, Type);
+    }
+
+    /// <summary>
+    /// <code>
+    /// Direction: Vector B
+    ///     unit vector in direction of A
+    /// </code>
+    /// </summary>
+    public override NVector Direction()
+        => Normalize();
+
+    /// <summary>
+    /// <code>
+    /// CrossProduct(Vector B): Vector C
+    ///     A.N=3 & B.N=3 => C.N=3
+    /// </code>
+    /// </summary>
     public override NVector CrossProduct(VectorBase<Number> other)
     {
         if (N != 3 || other.N != 3) throw new Exception($"cannot calculate cross product of vectors other than 3d-vectors. [V({N}) | U({other.N})]");
@@ -107,6 +233,13 @@ public class NVector : VectorBase<Number>
             Values[0] * other.Values[1] - Values[1] * other.Values[0]
         ], Type);
     }
+
+    /// <summary>
+    /// <code>
+    /// Projection(Vector B): Vector C
+    ///     A.N=B.N => =C.N
+    /// </code>
+    /// </summary>
     public override VectorBase<Number> Projection(VectorBase<Number> U)
     {
         var dotproduct = this * U;
@@ -165,7 +298,7 @@ public class NVector : VectorBase<Number>
         return true;
     }
     public static bool operator !=(NVector A, NVector B)
-        =>!(A == B);
+        => !(A == B);
     public static NVector operator *(NVector A, NMatrix B)
     {
         Number[] result;

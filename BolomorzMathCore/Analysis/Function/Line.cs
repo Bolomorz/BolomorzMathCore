@@ -1,7 +1,7 @@
 using System.Formats.Asn1;
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Analysis.Functions;
+namespace BolomorzMathCore.Analysis.Function;
 
 public class FLine(IFunction<Number> coeff1, IFunction<Number> coeff2) :
 FunctionBase<Number, (IFunction<Number> Coeff1, IFunction<Number> Coeff2)>((coeff1, coeff2), FunctionType.Line)

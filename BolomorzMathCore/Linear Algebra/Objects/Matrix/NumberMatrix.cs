@@ -62,8 +62,8 @@ namespace BolomorzMathCore.LinearAlgebra.Matrix;
 /// </code>
 /// </summary>
 /// <see cref="NDeterminant"/> 
-/// <see cref="SpecialQuadratic"/> 
-/// <see cref="MatrixArray"/> 
+/// <see cref="SpecialMatrix"/> 
+/// <see cref="VectorMatrix"/> 
 public class NMatrix : MatrixBase<Number>
 {
     /// <summary>
@@ -81,18 +81,18 @@ public class NMatrix : MatrixBase<Number>
     ///     identity: Diagonals are 1+0i, rest are 0+0i
     /// </code>
     /// </summary>
-    public NMatrix(SpecialQuadratic sq, int n) :
+    public NMatrix(SpecialMatrix sq, int n) :
     base(n, n, new Number[n, n])
     {
 
         switch (sq)
         {
-            case SpecialQuadratic.Zero:
+            case SpecialMatrix.Zero:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = new(0);
                 break;
-            case SpecialQuadratic.Identity:
+            case SpecialMatrix.Identity:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = row != col ?
@@ -110,16 +110,16 @@ public class NMatrix : MatrixBase<Number>
     ///     vector: (Nx1) Elements are the elements of the matrix array
     /// </code>
     /// </summary>
-    public NMatrix(MatrixArray ma, Number[] values) :
+    public NMatrix(VectorMatrix ma, NVector vector) :
     base(
-        values.Length,
-        ma == MatrixArray.Diagonals ? values.Length :
-        ma == MatrixArray.Vector ? 1 :
+        vector.N,
+        ma == VectorMatrix.Diagonals ? vector.N :
+        ma == VectorMatrix.Vector ? 1 :
         0,
         new Number[
-            values.Length,
-            ma == MatrixArray.Diagonals ? values.Length :
-            ma == MatrixArray.Vector ? 1 :
+            vector.N,
+            ma == VectorMatrix.Diagonals ? vector.N :
+            ma == VectorMatrix.Vector ? 1 :
             0
         ]
     )
@@ -127,17 +127,17 @@ public class NMatrix : MatrixBase<Number>
 
         switch (ma)
         {
-            case MatrixArray.Diagonals:
+            case VectorMatrix.Diagonals:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = row == col ?
-                            values[row] :
+                            vector.Values[row] :
                             new(0);
                 break;
 
-            case MatrixArray.Vector:
+            case VectorMatrix.Vector:
                 for (int row = 0; row < Rows; row++)
-                    Values[row, 0] = values[row];
+                    Values[row, 0] = vector.Values[row];
                 break;
 
         }
@@ -371,7 +371,7 @@ public class NMatrix : MatrixBase<Number>
     /// </code>
     /// </summary>
     public override bool IsOrthogonal()
-        => IsQuadratic() && this * this.Transpose() == new NMatrix(SpecialQuadratic.Identity, this.Rows);
+        => IsQuadratic() && this * this.Transpose() == new NMatrix(SpecialMatrix.Identity, this.Rows);
     /// <summary>
     /// <code>
     /// IsRegular: IsQuadratic AND |A| is not 0 ?

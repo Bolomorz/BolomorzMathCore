@@ -1,6 +1,6 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Analysis.Functions;
+namespace BolomorzMathCore.Analysis.Function;
 
 public class FPower(IFunction<Number> coeff, IFunction<Number> expo, IFunction<Number> c) :
 FunctionBase<Number, (IFunction<Number> Coeff, IFunction<Number> Expo, IFunction<Number> C)>((coeff, expo, c), FunctionType.Power)
@@ -48,7 +48,6 @@ FunctionBase<Number, (IFunction<Number> Coeff, IFunction<Number> Expo, IFunction
         if (c1 is null && e is null && c is null) return null;
         return (c1 is not null ? c1 : Number.One) * (e is not null ? xvalue.Pow(e) : Number.One) + (c is not null ? c : Number.Zero);
     }
-    //Values.Coeff * xvalue.Pow(Values.Expo) + Values.C;
 
     public static FPower Regression(Number coeff, Number expo)
         => new(new FConstant(coeff), new FConstant(expo), FConstant.NaF);

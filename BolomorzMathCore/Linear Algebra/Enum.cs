@@ -2,13 +2,13 @@ namespace BolomorzMathCore.LinearAlgebra;
 
 /// <summary>
 /// <code>
-/// Special Types:
+/// Special Matrix Types:
 /// - special quadratic (NxN):
 ///     zero: all Elements are 0+0i|0
 ///     identity: Diagonals are 1+0i|1, rest are 0+0i|0
 /// </code>
 /// </summary>
-public enum SpecialQuadratic
+public enum SpecialMatrix
 {
     /// <summary>
     /// <code>
@@ -26,13 +26,13 @@ public enum SpecialQuadratic
 
 /// <summary>
 /// <code>
-/// Special Types:
-/// - matrix array (N):
+/// Special Matrix Types:
+/// - vector matrix (N):
 ///     diagonals: (NxN) Diagonals are the elements of the matrix array, rest are 0+0i|0
 ///     vector: (Nx1) Elements are the elements of the matrix array
 /// </code>
 /// </summary>
-public enum MatrixArray
+public enum VectorMatrix
 {
     /// <summary>
     /// <code>
@@ -48,13 +48,41 @@ public enum MatrixArray
     Vector
 }
 
+/// <summary>
+/// <code>
+/// Special Vector Types:
+/// - zero: all Elements are 0+0i|0
+/// </code>
+/// </summary>
 public enum SpecialVector
 {
+    /// <summary>
+    /// <code>
+    /// zero: all Elements are 0+0i|0
+    /// </code>
+    /// </summary>
     Zero
 }
 
+/// <summary>
+/// <code>
+/// Vector Types in relation to matrices:
+/// - row: vector depicts a row of a matrix
+/// - column: vector depicts a column of a matrix
+/// </code>
+/// </summary>
 public enum VectorType
 {
+    /// <summary>
+    /// <code>
+    /// row: vector depicts a row of a matrix
+    /// </code>
+    /// </summary>
     Row,
+    /// <summary>
+    /// <code>
+    /// column: vector depicts a column of a matrix
+    /// </code>
+    /// </summary>
     Column
 }

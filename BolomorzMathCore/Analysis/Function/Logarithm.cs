@@ -1,6 +1,6 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Analysis.Functions;
+namespace BolomorzMathCore.Analysis.Function;
 
 public class FLogarithm(IFunction<Number> coeff1, IFunction<Number> coeff2, IFunction<Number> innerCoeff1, IFunction<Number> innerCoeff2, IFunction<Number> c) :
 FunctionBase<Number, (IFunction<Number> Coeff1, IFunction<Number> Coeff2, IFunction<Number> InnerCoeff1, IFunction<Number> InnerCoeff2, IFunction<Number> C)>((coeff1, coeff2, innerCoeff1, innerCoeff2, c), FunctionType.Logarithm)

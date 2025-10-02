@@ -5,31 +5,31 @@ namespace BolomorzMathCore.Basics;
 /// Complex Number
 /// 
 /// Complex = Re + Im * i
-/// Re = Number | Im = Number
+/// Re: Number | Im: Number
 /// 
 /// Operations on Complex A:
 /// - Conjugate:        
-///     Conjugate(A) = Complex | A.Re - A.Im * i
+///     A.Conjugate: Complex | A.Re - A.Im * i
 /// - Square:           
-///     Square(A) = Number | A.Re^2 + A.Im^2
+///     A.Square: Number | A.Re^2 + A.Im^2
 /// - Absolute:         
-///     Absolute(A) = Number | Sqrt(Square(A))
+///     A.Absolute: Number | Sqrt(A.Square)
 /// - Sign:             
-///     Sign(A) = Complex | A.Re/Absolute(A) + A.Im/Absolute(A) * i
+///     A.Sign: Complex | A.Re/A.Absolute + A.Im/A.Absolute * i
 /// - SquareRoot:       
-///     SquareRoot(A) = Complex | Sqrt((A.Re + Absolute(A))/2) + Im/Abs(Im) * Sqrt((-A.Re + Absolute(A))/2) * i
+///     A.SquareRoot: Complex | Sqrt((A.Re + A.Absolute)/2) + Im/Abs(Im) * Sqrt((-A.Re + A.Absolute)/2) * i
 /// 
 /// Operators Complex A, Complex B, Number N:
 /// - Addition:         
-///     A + B | A + N | N + A = Complex
+///     A + B | A + N | N + A : Complex
 /// - Subtraction:      
-///     A - B | A - N | N - A = Complex
+///     A - B | A - N | N - A : Complex
 /// - Multiplikation:   
-///     A * B | A * N | N * A = Complex
+///     A * B | A * N | N * A : Complex
 /// - Division:         
-///     A / B | A / N | N / A = Complex
+///     A / B | A / N | N / A : Complex
 /// - Comparison:       
-///     A greaterthan|lessthan|equalto B = bool
+///     A greaterthan|lessthan|equalto B : bool
 /// </code>
 /// </summary>
 public class Complex
@@ -51,7 +51,6 @@ public class Complex
     /// Complex Number
     /// 
     /// Complex = Re + Im * i
-    /// Re = Number | Im = Number
     /// </code>
     /// </summary>
     public Complex(double re, double im)
@@ -61,14 +60,28 @@ public class Complex
         Im = im;
 
     }
+    /// <summary>
+    /// <code>
+    /// Complex Number
+    /// 
+    /// Complex = complex.Re + complex.Im * i
+    /// </code>
+    /// </summary>
     public Complex(Complex complex)
     {
         Re = complex.Re;
         Im = complex.Im;
     }
-    public Complex(Number re)
+    /// <summary>
+    /// <code>
+    /// Complex Number
+    /// 
+    /// Complex = number.Re + 0 * i
+    /// </code>
+    /// </summary>
+    public Complex(Number number)
     {
-        Re = re.Re;
+        Re = number.Re;
         Im = 0;
     }
     /// <summary>

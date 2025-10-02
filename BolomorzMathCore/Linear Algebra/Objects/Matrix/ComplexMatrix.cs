@@ -71,8 +71,8 @@ namespace BolomorzMathCore.LinearAlgebra.Matrix;
 /// </summary>
 /// <see cref="Complex"/>
 /// <see cref="CDeterminant"/> 
-/// <see cref="SpecialQuadratic"/> 
-/// <see cref="MatrixArray"/> 
+/// <see cref="SpecialMatrix"/> 
+/// <see cref="VectorMatrix"/> 
 public class CMatrix : MatrixBase<Complex>
 {
     /// <summary>
@@ -91,18 +91,18 @@ public class CMatrix : MatrixBase<Complex>
     ///     identity: Diagonals are 1+0i, rest are 0+0i
     /// </code>
     /// </summary>
-    public CMatrix(SpecialQuadratic sq, int n) :
+    public CMatrix(SpecialMatrix sq, int n) :
     base(n, n, new Complex[n,n])
     {
 
         switch (sq)
         {
-            case SpecialQuadratic.Zero:
+            case SpecialMatrix.Zero:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = new Complex();
                 break;
-            case SpecialQuadratic.Identity:
+            case SpecialMatrix.Identity:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = row != col ?
@@ -121,16 +121,16 @@ public class CMatrix : MatrixBase<Complex>
     ///     vector: (Nx1) Elements are the elements of the matrix array
     /// </code>
     /// </summary>
-    public CMatrix(MatrixArray ma, Complex[] values) :
+    public CMatrix(VectorMatrix ma, CVector vector) :
     base(
-        values.Length,
-        ma == MatrixArray.Diagonals ? values.Length :
-        ma == MatrixArray.Vector ? 1 :
+        vector.N,
+        ma == VectorMatrix.Diagonals ? vector.N :
+        ma == VectorMatrix.Vector ? 1 :
         0,
         new Complex[
-            values.Length,
-            ma == MatrixArray.Diagonals ? values.Length :
-            ma == MatrixArray.Vector ? 1 :
+            vector.N,
+            ma == VectorMatrix.Diagonals ? vector.N :
+            ma == VectorMatrix.Vector ? 1 :
             0
         ]
     )
@@ -138,17 +138,17 @@ public class CMatrix : MatrixBase<Complex>
 
         switch (ma)
         {
-            case MatrixArray.Diagonals:
+            case VectorMatrix.Diagonals:
                 for (int row = 0; row < Rows; row++)
                     for (int col = 0; col < Cols; col++)
                         Values[row, col] = row == col ?
-                            values[row] :
+                            vector.Values[row] :
                             new Complex();
                 break;
 
-            case MatrixArray.Vector:
+            case VectorMatrix.Vector:
                 for (int row = 0; row < Rows; row++)
-                    Values[row, 0] = values[row];
+                    Values[row, 0] = vector.Values[row];
                 break;
 
         }
@@ -405,7 +405,7 @@ public class CMatrix : MatrixBase<Complex>
     /// </code>
     /// </summary>
     public override bool IsOrthogonal()
-        => IsQuadratic() && this * this.Transpose() == new CMatrix(SpecialQuadratic.Identity, this.Rows);
+        => IsQuadratic() && this * this.Transpose() == new CMatrix(SpecialMatrix.Identity, this.Rows);
     /// <summary>
     /// <code>
     /// IsHermitic: IsQuadratic AND A = ConjugateTranpose(A) ?
@@ -426,7 +426,7 @@ public class CMatrix : MatrixBase<Complex>
     /// </code>
     /// </summary>
     public override bool IsUnitary()
-        => IsQuadratic() && this * this.ConjugateTranspose() == new CMatrix(SpecialQuadratic.Identity, this.Rows);
+        => IsQuadratic() && this * this.ConjugateTranspose() == new CMatrix(SpecialMatrix.Identity, this.Rows);
     /// <summary>
     /// <code>
     /// IsRegular: IsQuadratic AND |A| is not 0 ?

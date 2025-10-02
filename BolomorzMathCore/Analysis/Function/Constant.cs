@@ -1,6 +1,6 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Analysis.Functions;
+namespace BolomorzMathCore.Analysis.Function;
 
 public class FConstant(Number coeff) :
 FunctionBase<Number, Number>(coeff, FunctionType.Constant)

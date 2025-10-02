@@ -1,6 +1,6 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Analysis.Functions;
+namespace BolomorzMathCore.Analysis.Function;
 
 public class FPolynomial(IFunction<Number>[] coeff) :
 FunctionBase<Number, IFunction<Number>[]>(coeff, FunctionType.Polynomial)

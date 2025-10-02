@@ -1,6 +1,6 @@
 using BolomorzMathCore.Basics;
 
-namespace BolomorzMathCore.Analysis.Functions;
+namespace BolomorzMathCore.Analysis.Function;
 
 public class FExponential(IFunction<Number> coeff, IFunction<Number> base0, IFunction<Number> c) :
 FunctionBase<Number, (IFunction<Number> Coeff, IFunction<Number> Base, IFunction<Number> C)>((coeff, base0, c), FunctionType.Exponential)
