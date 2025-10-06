@@ -10,6 +10,14 @@ public abstract class MatrixBase<T>(int rows, int cols, T[,] values) where T : c
     #region Get
     public abstract T GetValue(int row, int col);
     public abstract T GetDeterminant();
+    public abstract VectorBase<T> GetColumn(int col);
+    public abstract VectorBase<T> GetRow(int row);
+    #endregion
+
+    #region Set
+    public abstract void SetValue(int row, int col, T value);
+    public abstract void SetColumn(int col, VectorBase<T> vector);
+    public abstract void SetRow(int row, VectorBase<T> vector);
     #endregion
 
     protected abstract void CalculateDeterminant();

@@ -5,7 +5,7 @@ namespace BolomorzMathCore.LinearAlgebra.Algorithms;
 
 public class HessenbergTransform : AlgorithmBase<Complex, CMatrix>
 {
-    public HessenbergTransform(CMatrix matrix) : base(new(1, 1), new(SpecialQuadratic.Zero, 0))
+    public HessenbergTransform(CMatrix matrix) : base(new(1, 1), new(SpecialMatrix.Zero, 0))
     {
         if (!matrix.IsQuadratic()) throw new Exception($"cannot calculate HessenbergTransform of non quadratic matrix. [M({matrix.Rows}x{matrix.Cols})]");
         int n = matrix.Rows;
@@ -20,7 +20,7 @@ public class HessenbergTransform : AlgorithmBase<Complex, CMatrix>
         Result = CalculateHessenbergTransform(hbtransform, n, m);
     }
 
-    public HessenbergTransform(NMatrix matrix) : base(new(1), new(SpecialQuadratic.Zero, 0))
+    public HessenbergTransform(NMatrix matrix) : base(new(1), new(SpecialMatrix.Zero, 0))
     {
         if (!matrix.IsQuadratic()) throw new Exception($"cannot calculate HessenbergTransform of non quadratic matrix. [M({matrix.Rows}x{matrix.Cols})]");
         int n = matrix.Rows;

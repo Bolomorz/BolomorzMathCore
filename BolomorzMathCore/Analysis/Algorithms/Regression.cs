@@ -34,7 +34,7 @@ namespace BolomorzMathCore.Analysis.Algorithms;
 /// </code>
 /// </summary>
 /// <see cref="FunctionBase{Number, U}"/> 
-public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoint>, IFunction<Number>>(points, FConstant.NaF)
+public class Regression(List<Point<Number>> points) : AlgorithmBase<List<Point<Number>>, IFunction<Number>>(points, FConstant.NaF)
 {
     public Regression PolynomialRegression(int order)
     {
@@ -71,7 +71,7 @@ public class Regression(List<SeriesPoint> points) : AlgorithmBase<List<SeriesPoi
 internal static class RegressionAlgorithms
 {
 
-    internal static Number[]? LinearRegression(List<SeriesPoint> points)
+    internal static Number[]? LinearRegression(List<Point<Number>> points)
     {
         int n = points.Count;
 
@@ -94,7 +94,7 @@ internal static class RegressionAlgorithms
         return [a, b];
     }
 
-    internal static Number[]? PowerRegression(List<SeriesPoint> points)
+    internal static Number[]? PowerRegression(List<Point<Number>> points)
     {
         int n = points.Count;
 
@@ -117,7 +117,7 @@ internal static class RegressionAlgorithms
         return [a.Exp(), b];
     }
 
-    internal static Number[]? ExponentialRegression(List<SeriesPoint> points)
+    internal static Number[]? ExponentialRegression(List<Point<Number>> points)
     {
         int n = points.Count;
 
@@ -140,7 +140,7 @@ internal static class RegressionAlgorithms
         return [a.Exp(), b.Exp()];
     }
 
-    internal static Number[]? LogarithmicRegression(List<SeriesPoint> points)
+    internal static Number[]? LogarithmicRegression(List<Point<Number>> points)
     {
         int n = points.Count;
 
@@ -163,7 +163,7 @@ internal static class RegressionAlgorithms
         return [a, b];
     }
 
-    internal static Number[]? PolynomialRegression(int order, List<SeriesPoint> points)
+    internal static Number[]? PolynomialRegression(int order, List<Point<Number>> points)
     {
         return new AugmentedCoefficientMatrix(order, points).GetSolution();
     }
@@ -173,7 +173,7 @@ internal static class RegressionAlgorithms
         private Number[,] Matrix;
         private int n;
         private int m;
-        public AugmentedCoefficientMatrix(int order, List<SeriesPoint> points)
+        public AugmentedCoefficientMatrix(int order, List<Point<Number>> points)
         {
             m = points.Count;
             n = order + 1;

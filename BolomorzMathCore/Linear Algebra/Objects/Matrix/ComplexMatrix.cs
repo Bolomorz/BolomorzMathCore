@@ -113,6 +113,14 @@ public class CMatrix : MatrixBase<Complex>
 
     }
 
+    public CMatrix(int n, int m) :
+    base(n, m, new Complex[n, m])
+    {
+        for (int row = 0; row < Rows; row++)
+            for (int col = 0; col < Cols; col++)
+                Values[row, col] = new Complex();
+    }
+
     /// <summary>
     /// <code>
     /// Special Types:
@@ -206,6 +214,50 @@ public class CMatrix : MatrixBase<Complex>
     {
         CalculateDeterminant();
         return Determinant is not null ? Determinant : new(double.NaN);
+    }
+    public override VectorBase<Complex> GetColumn(int col)
+    {
+        if (col < 1 || col > Cols) throw new IndexOutOfRangeException();
+        List<Complex> vector = [];
+        for (int i = 0; i < Rows; i++)
+            vector.Add(new(Values[i, col - 1]));
+        return new CVector([.. vector], VectorType.Column);
+    }
+    public override VectorBase<Complex> GetRow(int row)
+    {
+        if (row < 1 || row > Rows) throw new IndexOutOfRangeException();
+        List<Complex> vector = [];
+        for (int i = 0; i < Cols; i++)
+            vector.Add(new(Values[row - 1, i]));
+        return new CVector([.. vector], VectorType.Row);
+    }
+    #endregion
+
+    #region Set
+    public override void SetValue(int row, int col, Complex value)
+    {
+        if (row > Rows || row < 1 || col > Cols || col < 1) throw new IndexOutOfRangeException();
+        Values[row - 1, col - 1] = value;
+    }
+    public override void SetColumn(int col, VectorBase<Complex> vector)
+    {
+        if (vector.N != Rows || col > Cols || col < 1) throw new IndexOutOfRangeException();
+        for (int row = 0; row < Rows; row++)
+        {
+            var value = vector.GetValue(row + 1);
+            if (value is not null)
+                Values[row, col - 1] = value;
+        }
+    }
+    public override void SetRow(int row, VectorBase<Complex> vector)
+    {
+        if (row > Rows || row < 1 || vector.N != Cols) throw new IndexOutOfRangeException();
+        for (int col = 0; col < Cols; col++)
+        {
+            var value = vector.GetValue(col + 1);
+            if (value is not null)
+                Values[row - 1, col] = value;
+        }
     }
     #endregion
 

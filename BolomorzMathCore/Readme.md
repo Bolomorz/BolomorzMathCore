@@ -25,7 +25,7 @@ abstraction layers:
     - **Basics**: base classes for numbers and algorithms
         - **Complex**: Complex Number
         - **Number**: Real Number
-        - **AlgorithmBase**: base class for algorithms with `generics<T, U>`
+        - **AlgorithmBase**: base class for algorithms with `generics<T, U>` where T is input-type and U is output-type
     - ---
     - **Analysis**: algorithms on relations and functions in a x-y coordinate system
         - **Base**:
@@ -38,18 +38,18 @@ abstraction layers:
             - **Point**: (x, y)-tuple/point
             - **Series**: series of (x, y)-tuple/points | scatter
         - **Function**:
-            - **Constant**:     constant number `f(x) = c`
+            - **Constant**:     constant number `f(x) = a`
             - **Exponential**:  `f(x) = a(x) * b(x)^x + c(x)`
             - **Line**:         `f(x) = a(x) + b(x) * x`
             - **Logarithm**:    `f(x) = a(x) + b(x) * ln(c(x) + d(x) * x) + e(x)`
             - **Polynomial**:   `f(x) = sum(f{i}(x): a{i}(x) * x^i)`
             - **Power**:        `f(x) = a(x) * x^b(x) + c(x)`
         - **Algorithms**:
-            - **Regression**: finding best-fit-function for a series/scatter: `AlgorithmBase<Series, Function<Number>>`
+            - **Regression**: finding best-fit-function for a relation (series/scatter): `AlgorithmBase<Relation<Number>, Function<Number>>`
     - ---
     - **GraphTheory**: algorithms on graphs (for now `graph=vertices&edges`)
         - **Objects**:
-            - **Edge**: edge connection two vertices of a graph
+            - **Edge**: edge connecting two vertices of a graph
             - **Vertex**: point/intersection-element of a graph
             - **Graph**: collection of vertices and edges
         - **Algorithms**:
@@ -72,7 +72,7 @@ abstraction layers:
             - **HessenbergTransform**: preparing matrix for qr-transform | eliminating most of the upper half above the diagonal: `AlgorithmBase<Matrix, Matrix>`
             - **QR-Transform**: eliminating the upper half above the diagonal to find the eigenvalues of a matrix: `AlgorithmBase<HessenbergTransform, Matrix>`
     - ---
-    - **Visualization**: visualization and interaction with elements of this library | generally on a canvas | prefix BMC for identification
+    - **Visualization**: visualization and interaction with elements of this library | generally on a 2d-canvas | prefix BMC for identification
         - **BMCSettings**: settings for different elements
         - **Command**: commands on an element returning a solution //for now not used
         - **Generics**:
@@ -82,7 +82,7 @@ abstraction layers:
                 - **BMCCollection**: collection of geometries for one element
             - **BMCElementBase**: base class for all elements `generic T=[Vertex, Edge, Matrix, Series...]`
             - **BMCGeometryBase**: base class for geometry-objects
-        - **Geometry**: different geometries depicting the elements | transformations on those elements
+        - **Geometry**: different geometries depicting the elements | transformations (translate, rotate, scale, reflect) on those elements
             - **BMCArc**: circle, half-circle...
             - **BMCArrow**: arrow/pointer/direction
             - **BMCLine**: connector

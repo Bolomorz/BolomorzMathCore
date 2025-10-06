@@ -73,6 +73,8 @@ public class Number
     /// </code>
     /// </summary>
     public static readonly Number NaN = new(double.NaN);
+    public static readonly Number Min = new(double.MinValue);
+    public static readonly Number Max = new(double.MaxValue);
 
     /// <summary>
     /// <code>

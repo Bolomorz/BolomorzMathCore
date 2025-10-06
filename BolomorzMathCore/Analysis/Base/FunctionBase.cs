@@ -1,5 +1,3 @@
-using BolomorzMathCore.Basics;
-
 namespace BolomorzMathCore.Analysis;
 
 /// <summary>

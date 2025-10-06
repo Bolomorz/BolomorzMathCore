@@ -28,11 +28,11 @@ public class CharacteristicPolynomial : AlgorithmBase<Complex, Complex[]>
 
         C[n - 1] = new(1);
         C[n - 2] = -H.Trace();
-        M[0] = new(SpecialQuadratic.Identity, n);
+        M[0] = new(SpecialMatrix.Identity, n);
 
         while (k <= n)
         {
-            M[k - 1] = H * M[k - 2] + C[n - k] * new CMatrix(SpecialQuadratic.Identity, n);
+            M[k - 1] = H * M[k - 2] + C[n - k] * new CMatrix(SpecialMatrix.Identity, n);
             C[n - k - 1] = -(1 / k) * (H * M[k - 1]).Trace();
             k++;
         }
@@ -52,11 +52,11 @@ public class CharacteristicPolynomial : AlgorithmBase<Complex, Complex[]>
 
         C[n - 1] = new(1);
         C[n - 2] = -H.Trace();
-        M[0] = new(SpecialQuadratic.Identity, n);
+        M[0] = new(SpecialMatrix.Identity, n);
 
         while (k <= n)
         {
-            M[k - 1] = H * M[k - 2] + C[n - k] * new CMatrix(SpecialQuadratic.Identity, n);
+            M[k - 1] = H * M[k - 2] + C[n - k] * new CMatrix(SpecialMatrix.Identity, n);
             C[n - k - 1] = -(1 / k) * (H * M[k - 1]).Trace();
             k++;
         }
