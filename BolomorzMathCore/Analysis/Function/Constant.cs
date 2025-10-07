@@ -23,7 +23,7 @@ FunctionBase<Number, Number>(coeff, FunctionType.Constant)
         if (Values != Number.NaN)
         {
             var value = Values.Round(precision);
-            fscoll._FunctionStrings.Add(new($"{value}", Script.Baseline));
+            fscoll.Add(new FunctionString($"{value}", Script.Baseline));
         }
         return fscoll;
     }
