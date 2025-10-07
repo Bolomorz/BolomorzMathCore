@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BolomorzMathCore", "BolomorzMathCore\BolomorzMathCore.csproj", "{01F03E1C-269E-4985-AD0E-AE391A45909E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BolomorzMathCoreTest", "BolomorzMathCoreTest\BolomorzMathCoreTest.csproj", "{CAA8034A-E81F-42BF-9210-8FC9758A6AC5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{01F03E1C-269E-4985-AD0E-AE391A45909E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{01F03E1C-269E-4985-AD0E-AE391A45909E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01F03E1C-269E-4985-AD0E-AE391A45909E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAA8034A-E81F-42BF-9210-8FC9758A6AC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAA8034A-E81F-42BF-9210-8FC9758A6AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAA8034A-E81F-42BF-9210-8FC9758A6AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAA8034A-E81F-42BF-9210-8FC9758A6AC5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
