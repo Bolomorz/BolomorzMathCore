@@ -2,6 +2,15 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Function;
 
+/// <summary>
+/// <code>
+/// Function F
+/// 
+/// function f(x) = y assigning each input from a set of x-values exactly one output from a set of y-values
+/// 
+/// Polynomial: f(x) = f{0}(x) + f{1}(x) * x^1 + ... + f{n}(x) * x^n;
+/// </code>
+/// </summary>
 public class FPolynomial(IFunction<Number>[] coeff) :
 FunctionBase<Number, IFunction<Number>[]>(coeff, FunctionType.Polynomial)
 {

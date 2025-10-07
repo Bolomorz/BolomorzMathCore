@@ -28,6 +28,7 @@ public abstract class MatrixBase<T>(int rows, int cols, T[,] values) where T : c
     public abstract MatrixBase<T> Inverse();
     public abstract MatrixBase<T> Conjugate();
     public abstract MatrixBase<T> ConjugateTranspose();
+    public abstract MatrixBase<T> ApplyGaussJordanElimination();
     #endregion
 
     public abstract bool IsQuadratic();

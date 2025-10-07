@@ -75,13 +75,15 @@ namespace BolomorzMathCore.LinearAlgebra.Matrix;
 /// <see cref="VectorMatrix"/> 
 public class CMatrix : MatrixBase<Complex>
 {
+    public readonly static CMatrix Default = new(0, 0);
     /// <summary>
     /// <code>
     /// Matrix (Values.N)x(Values.M)
     /// </code>
     /// </summary>
     public CMatrix(Complex[,] values) :
-    base(values.GetLength(0), values.GetLength(1), values) { }
+    base(values.GetLength(0), values.GetLength(1), values)
+    { }
 
     /// <summary>
     /// <code>
@@ -262,6 +264,52 @@ public class CMatrix : MatrixBase<Complex>
     #endregion
 
     #region Transformation
+    public override CMatrix ApplyGaussJordanElimination()
+    {
+        int h = 1;
+        int k = 1;
+
+        while (h <= Rows && k <= Cols)
+        {
+            int imax = h;
+            Complex argmax = GetValue(h, k);
+            for (int i = h; i <= Rows; i++)
+            {
+                var argi = GetValue(i, k);
+                if (argi.Absolute() > argmax.Absolute())
+                {
+                    imax = i;
+                    argmax = argi;
+                }
+            }
+
+            if (GetValue(imax, k) == Complex.Zero)
+            {
+                k++;
+            }
+            else
+            {
+                if (h != imax)
+                {
+                    var rowh = GetRow(h);
+                    var rowimax = GetRow(imax);
+                    SetRow(h, rowimax);
+                    SetRow(imax, rowh);
+                }
+
+                for (int i = h + 1; i < Rows; i++)
+                {
+                    var f = GetValue(i, k) / GetValue(h, k);
+                    SetValue(i, k, new());
+                    for (int j = k + 1; k < Cols; k++)
+                        SetValue(i, j, GetValue(i, j) - GetValue(h, j) * f);
+                }
+                h++;
+                k++;
+            }
+        }
+        return this;
+    }
     /// <summary>
     /// <code>
     /// SubMatrix(i,j): Matrix B

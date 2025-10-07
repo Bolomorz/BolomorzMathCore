@@ -8,12 +8,22 @@ namespace BolomorzMathCore.Analysis;
 /// 
 /// Properties:
 /// - Content: String | part of F
-/// - SuperScript: Bool | content is displayed as superscript ?
+/// - SuperScript: SuperScript | Baseline | Subscript
 /// </code>
 /// </summary>
 public class FunctionString
 {
+    /// <summary>
+    /// <code>
+    /// Content: String | part of F
+    /// </code>
+    /// </summary>
     public string Content { get; init; }
+    /// <summary>
+    /// <code>
+    /// SuperScript: SuperScript | Baseline | Subscript
+    /// </code>
+    /// </summary>
     public Script Script { get; init; }
 
     internal FunctionString(string content, Script script)
@@ -29,6 +39,9 @@ public class FunctionString
 /// 
 /// collection of strings representing parts of function F
 /// 
+/// Methods:
+/// - Reduce: reduce collection merging in sequence elements with same script-type
+/// 
 /// Getters:
 /// - GetFunctionStrings: FunctionString[] | collection of strings representing parts of function F
 /// </code>
@@ -36,7 +49,7 @@ public class FunctionString
 /// <see cref="FunctionString"/> 
 public class FunctionStringCollection(CompositionType fc)
 {
-    internal List<FunctionString> _FunctionStrings { get; set; } =
+    private List<FunctionString> _FunctionStrings { get; set; } =
         fc == CompositionType.CompositeFunction ?
             [
                 new("f(x) = ", Script.Baseline),
@@ -48,21 +61,26 @@ public class FunctionStringCollection(CompositionType fc)
             ];
 
     internal bool IsEmpty()
-        => _FunctionStrings.Count == 0;
+        => _FunctionStrings.Count == 2;
     internal void Add(FunctionStringCollection fscoll)
     {
         foreach (var fs in fscoll._FunctionStrings)
-            _FunctionStrings.Add(fs);
+            _FunctionStrings.Insert(_FunctionStrings.Count - 2, fs);
     }
     internal void Add(FunctionStringCollection fscoll, Script script)
     {
         foreach (var fs in fscoll._FunctionStrings)
-            _FunctionStrings.Add(new(fs.Content, script));
+            _FunctionStrings.Insert(_FunctionStrings.Count - 2, new(fs.Content, script));
     }
     internal void Add(FunctionString fs)
     {
         _FunctionStrings.Insert(_FunctionStrings.Count - 2, fs);
     }
+    /// <summary>
+    /// <code>
+    /// Reduce: reduce collection merging in sequence elements with same script-type
+    /// </code>
+    /// </summary>
     public void Reduce()
     {
         List<FunctionString> reduced = [];
@@ -85,5 +103,10 @@ public class FunctionStringCollection(CompositionType fc)
         _FunctionStrings = reduced;
     }
 
+    /// <summary>
+    /// <code>
+    /// GetFunctionStrings: FunctionString[] | collection of strings representing parts of function F
+    /// </code>
+    /// </summary>
     public FunctionString[] GetFunctionStrings() => [.. _FunctionStrings];
 }

@@ -3,6 +3,15 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Function;
 
+/// <summary>
+/// <code>
+/// Function F
+/// 
+/// function f(x) = y assigning each input from a set of x-values exactly one output from a set of y-values
+/// 
+/// Line: f(x) = a(x) + b(x) * x;
+/// </code>
+/// </summary>
 public class FLine(IFunction<Number> coeff1, IFunction<Number> coeff2) :
 FunctionBase<Number, (IFunction<Number> Coeff1, IFunction<Number> Coeff2)>((coeff1, coeff2), FunctionType.Line)
 {

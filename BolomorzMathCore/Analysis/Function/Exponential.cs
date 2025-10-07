@@ -2,6 +2,15 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Function;
 
+/// <summary>
+/// <code>
+/// Function F
+/// 
+/// function f(x) = y assigning each input from a set of x-values exactly one output from a set of y-values
+/// 
+/// Exponential: f(x) = a(x) * b(x)^x + c(x);
+/// </code>
+/// </summary>
 public class FExponential(IFunction<Number> coeff, IFunction<Number> base0, IFunction<Number> c) :
 FunctionBase<Number, (IFunction<Number> Coeff, IFunction<Number> Base, IFunction<Number> C)>((coeff, base0, c), FunctionType.Exponential)
 {

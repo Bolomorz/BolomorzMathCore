@@ -13,7 +13,7 @@ namespace BolomorzMathCore.Analysis;
 /// </code>
 /// </summary>
 /// <see cref="NRelation"/> 
-/// <see cref="Axis"/> 
+/// <see cref="NAxis"/> 
 public class Chart
 {
     public required string Title { get; set; }

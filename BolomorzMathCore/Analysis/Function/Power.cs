@@ -2,6 +2,15 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Function;
 
+/// <summary>
+/// <code>
+/// Function F
+/// 
+/// function f(x) = y assigning each input from a set of x-values exactly one output from a set of y-values
+/// 
+/// Power: f(x) = a(x) * x^b(x) + c(x);
+/// </code>
+/// </summary>
 public class FPower(IFunction<Number> coeff, IFunction<Number> expo, IFunction<Number> c) :
 FunctionBase<Number, (IFunction<Number> Coeff, IFunction<Number> Expo, IFunction<Number> C)>((coeff, expo, c), FunctionType.Power)
 {

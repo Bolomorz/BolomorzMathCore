@@ -18,9 +18,29 @@ namespace BolomorzMathCore.Analysis;
 /// <typeparam name="T">Number|Complex</typeparam>
 public interface IFunction<T> where T : class
 {
-    FunctionType Type { get; }
+    /// <summary>
+    /// <code>
+    /// Type: FunctionType | type of function (Line, Polynomial, Exponential, Power, Logarithm)
+    /// </code>
+    /// </summary>
+    FunctionType Type { get; init; }
+    /// <summary>
+    /// <code>
+    /// ShowFunction: Bool | is function currently shown in chart C ?
+    /// </code>
+    /// </summary>
     bool ShowFunction { get; set; }
+    /// <summary>
+    /// <code>
+    /// GetValue(x): Number | value = f(x)
+    /// </code>
+    /// </summary>
     T? GetValue(T xvalue);
+    /// <summary>
+    /// <code>
+    /// GetStringCollection(int precision): FunctionStringCollection | string representation of function
+    /// </code>
+    /// </summary>
     FunctionStringCollection GetStringCollection(int precision, CompositionType type);
 }
 /// <summary>

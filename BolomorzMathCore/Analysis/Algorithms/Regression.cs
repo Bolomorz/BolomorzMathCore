@@ -1,5 +1,6 @@
 using BolomorzMathCore.Analysis.Function;
 using BolomorzMathCore.Basics;
+using BolomorzMathCore.LinearAlgebra.Matrix;
 
 namespace BolomorzMathCore.Analysis.Algorithms;
 
@@ -165,66 +166,33 @@ internal static class RegressionAlgorithms
 
     internal static Number[]? PolynomialRegression(int order, List<Point<Number>> points)
     {
-        return new AugmentedCoefficientMatrix(order, points).GetSolution();
-    }
-    
-    private class AugmentedCoefficientMatrix
-    {
-        private Number[,] Matrix;
-        private int n;
-        private int m;
-        public AugmentedCoefficientMatrix(int order, List<Point<Number>> points)
+        int n = order + 1;
+        int m = points.Count;
+        if(m < n+1) return null;
+
+        Number[,] acmatrix = new Number[n, n + 1];
+        for(int i = 1; i <=n; i++)
         {
-            m = points.Count;
-            n = order + 1;
-            Matrix = new Number[n, n+1];
-            for(int i = 1; i <=n; i++)
+            Number sum;
+            for(int j = 1; j <= i; j++)
             {
-                Number sum;
-                for(int j = 1; j <= i; j++)
-                {
-                    Number k = new(i + j - 2);
-                    sum = new(0);
-                    for(int l = 1; l <= m; l++) sum += points[l-1].X.Pow(k);
-                    Matrix[i-1, j-1] = sum;
-                    Matrix[j-1, i-1] = sum;
-                }
+                Number k = new(i + j - 2);
                 sum = new(0);
-                for(int l = 1; l <= m; l++) sum += points[l-1].Y * points[l-1].X.Pow(new(i-1));
-                Matrix[i-1, n] = sum;
+                for(int l = 1; l <= m; l++) sum += points[l-1].X.Pow(k);
+                acmatrix[i-1, j-1] = sum;
+                acmatrix[j-1, i-1] = sum;
             }
+            sum = new(0);
+            for(int l = 1; l <= m; l++) sum += points[l-1].Y * points[l-1].X.Pow(new(i-1));
+            acmatrix[i-1, n] = sum;
         }
 
-        public Number[]? GetSolution()
-        {
-            try
-            {
-                if(m < n+1) return null;
-                ApplyGaussJordanElimination();
-                Number[] solution = new Number[n];
-                for(int i = 0; i < n; i++) solution[i] = Matrix[i, n]/Matrix[i, i];
-                return solution;
-            }
-            catch
-            {
-                return null;
-            }
-        }
+        NMatrix matrix = new(acmatrix);
+        matrix.ApplyGaussJordanElimination();
 
-        private void ApplyGaussJordanElimination()
-        {
-            for(int i = 0; i < n; i++)
-            {
-                if(Matrix[i, i] == Number.Zero) throw new DivideByZeroException();
-                for(int j = 0; j < n; j++)
-                {
-                    if(i != j)
-                    {
-                        Number Ratio = Matrix[j, i] / Matrix[i, i];
-                        for(int k = 0; k <= n; k++) Matrix[j, k] -= Ratio * Matrix[i, k];
-                    }
-                }
-            }
-        }
+        Number[] solution = new Number[n];
+        for(int i = 1; i <= n; i++) solution[i] = matrix.GetValue(i, n+1)/matrix.GetValue(i, i);
+
+        return solution;
     }
 }

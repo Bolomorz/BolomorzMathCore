@@ -49,6 +49,14 @@ public abstract class RelationBase<T>(Color color, AxisBase<T> axis, IFunction<T
     /// <summary>
     /// <code>
     /// AddPoint(x, y): add point to values
+    /// 
+    /// when a new-value is added to the relation this axis belongs to, 
+    /// the default min/max values will be recalculated only if new-value is less than Min / more than Max
+    /// - Max sets itself to next digit greater than new-value, if new-value > Max
+    ///     f.e.    new-value = 15 => Max = DefaultMax = 20
+    /// - Min sets itself to next digit less than new-value, but only if its at least 1/10 of Max, else its 0
+    ///     f.e.    new-value = 15 AND Max = 20 => Min = DefaultMin = 10
+    ///             new-value = 15 AND Max = 200 => Min = DefaultMin = 0 (not 10)
     /// </code>
     /// </summary>
     public abstract void AddPoint(T x, T y);

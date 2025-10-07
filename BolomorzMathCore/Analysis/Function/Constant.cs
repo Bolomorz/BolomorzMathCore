@@ -2,6 +2,15 @@ using BolomorzMathCore.Basics;
 
 namespace BolomorzMathCore.Analysis.Function;
 
+/// <summary>
+/// <code>
+/// Function F
+/// 
+/// function f(x) = y assigning each input from a set of x-values exactly one output from a set of y-values
+/// 
+/// Constant: f(x) = a; a is Number
+/// </code>
+/// </summary>
 public class FConstant(Number coeff) :
 FunctionBase<Number, Number>(coeff, FunctionType.Constant)
 {
